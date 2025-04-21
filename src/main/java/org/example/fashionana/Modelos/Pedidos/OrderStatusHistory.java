@@ -45,4 +45,22 @@ public class OrderStatusHistory {
     protected void onCreate() {
         updatedAt = LocalDateTime.now();
     }
+
+    public void setChangedAt(LocalDateTime now) {
+        this.updatedAt = now;
+    }
+
+    public void setNewStatus(OrderStatus newStatus) {
+        this.status = newStatus;
+    }
+
+    public void setOldStatus(OrderStatus oldStatus) {
+        // Como no existe un campo oldStatus en la clase,
+        // podríamos guardarlo en las notas
+        if (this.notes == null) {
+            this.notes = "Status anterior: " + oldStatus;
+        } else {
+            this.notes = "Status anterior: " + oldStatus + ". " + this.notes;
+        }
+    }
 }

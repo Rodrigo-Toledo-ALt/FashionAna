@@ -1,5 +1,10 @@
 -- FashionDAM Clothing Store Database Schema
 
+create schema BBDD_FashionDAM;
+CREATE SCHEMA IF NOT EXISTS BBDD_FashionDAM;
+SET search_path TO BBDD_FashionDAM;
+
+
 -- Category table for product classification
 CREATE TABLE categories (
     category_id SERIAL PRIMARY KEY,
