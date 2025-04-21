@@ -2,6 +2,7 @@ package org.example.fashionana.Servicios.Clientes;
 
 import org.example.fashionana.Modelos.Clientes.Customer;
 import org.example.fashionana.Repositorios.Clientes.CustomerRepository;
+import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -30,7 +31,15 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public Customer save(Customer customer) {
+        // Hashear la contraseña manualmente
+        String hashedPassword = BCrypt.hashpw(customer.getPassword(), BCrypt.gensalt());
+        customer.setPassword(hashedPassword);
         return customerRepository.save(customer);
+    }
+
+    // Para verificar después:
+    public boolean checkPassword(String plainPassword, String hashedPassword) {
+        return BCrypt.checkpw(plainPassword, hashedPassword);
     }
 
     @Override

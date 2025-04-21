@@ -11,4 +11,5 @@ public interface EmployeeService {
     Employee save(Employee employee);
     void deleteById(Long id);
     Optional<Employee> findByEmail(String email);
+    boolean checkPassword(String plainPassword, String hashedPassword);
 }

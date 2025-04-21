@@ -2,6 +2,7 @@ package org.example.fashionana.Servicios.Inventario_Empleados;
 
 import org.example.fashionana.Modelos.Inventario_Empleados.Employee;
 import org.example.fashionana.Repositorios.Inventario_Empleados.EmployeeRepository;
+import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -30,7 +31,15 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     public Employee save(Employee employee) {
+        // Hashear la contraseña antes de guardar
+        String hashedPassword = BCrypt.hashpw(employee.getPassword(), BCrypt.gensalt());
+        employee.setPassword(hashedPassword);
         return employeeRepository.save(employee);
+    }
+
+    // Método para verificar contraseñas
+    public boolean checkPassword(String plainPassword, String hashedPassword) {
+        return BCrypt.checkpw(plainPassword, hashedPassword);
     }
 
     @Override

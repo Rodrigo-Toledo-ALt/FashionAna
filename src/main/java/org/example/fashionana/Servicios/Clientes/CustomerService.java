@@ -11,4 +11,5 @@ public interface CustomerService {
     Customer save(Customer customer);
     void deleteById(Long id);
     Optional<Customer> findByEmail(String email);
+    boolean checkPassword(String plainPassword, String hashedPassword);
 }
