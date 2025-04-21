@@ -6,7 +6,6 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.example.fashionana.Modelos.Productos.ProductVariant;
-import org.example.fashionana.Modelos.ReturnItem;
 
 import java.math.BigDecimal;
 import java.util.List;

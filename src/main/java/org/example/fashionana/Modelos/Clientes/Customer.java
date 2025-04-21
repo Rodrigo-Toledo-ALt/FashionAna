@@ -6,7 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.example.fashionana.Modelos.Pedidos.Order;
-import org.example.fashionana.Modelos.Return;
+import org.example.fashionana.Modelos.Pedidos.Return;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;

@@ -11,8 +11,6 @@ import org.example.fashionana.Modelos.Clientes.PaymentMethod;
 import org.example.fashionana.Modelos.DeliveryType;
 import org.example.fashionana.Modelos.Inventario_Empleados.Employee;
 import org.example.fashionana.Modelos.OrderStatus;
-import org.example.fashionana.Modelos.Return;
-import org.example.fashionana.Modelos.Transaction;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;

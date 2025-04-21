@@ -7,8 +7,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.example.fashionana.Modelos.Pedidos.Order;
 import org.example.fashionana.Modelos.Pedidos.OrderStatusHistory;
-import org.example.fashionana.Modelos.Return;
-import org.example.fashionana.Modelos.Transaction;
+import org.example.fashionana.Modelos.Pedidos.Return;
+import org.example.fashionana.Modelos.Pedidos.Transaction;
 
 import java.time.LocalDateTime;
 import java.util.List;

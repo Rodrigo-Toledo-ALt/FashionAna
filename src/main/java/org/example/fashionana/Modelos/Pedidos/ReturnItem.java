@@ -1,4 +1,4 @@
-package org.example.fashionana.Modelos;
+package org.example.fashionana.Modelos.Pedidos;
 
 
 
@@ -6,7 +6,6 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.example.fashionana.Modelos.Pedidos.OrderItem;
 
 import java.math.BigDecimal;
 
