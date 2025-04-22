@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{layout :: head(~{::title})}"> 
+    <title>Productos | FashionAna</title>
+</head>
+<body>
+    <header th:replace="~{layout :: header}"></header>
+
+    <main class="container py-4" th:fragment="content">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h1>Catálogo de Productos</h1>
+            <div th:if="${session.userType == 'employee'}">
+                <a href="/products/new" class="btn btn-primary"><i class="bi bi-plus-circle"></i> Nuevo Producto</a>
+            </div>
+        </div>
+        
+        <!-- Filtros y búsqueda -->
+        <div class="card mb-4">
+            <div class="card-body">
+                <form action="/products" method="get" class="row g-3">
+                    <div class="col-md-4">
+                        <label for="category" class="form-label">Categoría</label>
+                        <select id="category" name="categoryId" class="form-select">
+                            <option value="">Todas las categorías</option>
+                            <option th:each="category : ${categories}" th:value="${category.id}" th:text="${category.name}"></option>
+                        </select>
+                    </div>
+                    <div class="col-md-4">
+                        <label for="search" class="form-label">Buscar</label>
+                        <input type="text" class="form-control" id="search" name="search" placeholder="Nombre o descripción...">
+                    </div>
+                    <div class="col-md-4">
+                        <label for="sort" class="form-label">Ordenar por</label>
+                        <select id="sort" name="sort" class="form-select">
+                            <option value="name">Nombre (A-Z)</option>
+                            <option value="price_asc">Precio (menor a mayor)</option>
+                            <option value="price_desc">Precio (mayor a menor)</option>
+                            <option value="newest">Más recientes</option>
+                        </select>
+                    </div>
+                    <div class="col-12 text-end">
+                        <button type="submit" class="btn btn-primary">Aplicar filtros</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        
+        <!-- Listado de productos en cards -->
+        <div class="row">
+            <div class="col-md-4 col-sm-6 mb-4" th:each="product : ${products}">
+                <div class="card h-100">
+                    <img th:if="${product.imageUrl}" th:src="${product.imageUrl}" class="card-img-top" alt="Imagen del producto">
+                    <img th:unless="${product.imageUrl}" src="https://placehold.co/400x300?text=Sin+Imagen" class="card-img-top" alt="Sin imagen">
+                    <div class="card-body">
+                        <h5 class="card-title" th:text="${product.name}"></h5>
+                        <p class="card-text text-muted" th:text="${product.category.name}"></p>
+                        <p class="card-text" th:text="${#strings.abbreviate(product.description, 100)}"></p>
+                        <p class="card-text fw-bold" th:text="${#numbers.formatCurrency(product.price)}"></p>
+                        <div class="d-flex justify-content-between">
+                            <a th:href="@{/products/{id}(id=${product.id})}" class="btn btn-primary">Ver detalles</a>
+                            <div th:if="${session.userType == 'employee'}" class="btn-group">
+                                <a th:href="@{/products/{id}/edit(id=${product.id})}" class="btn btn-warning">Editar</a>
+                                <a th:href="@{/products/{id}/delete(id=${product.id})}" class="btn btn-danger"
+                                   onclick="return confirm('¿Estás seguro de eliminar este producto?')">Eliminar</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12" th:if="${products.isEmpty()}">
+                <div class="alert alert-info text-center">
+                    No se encontraron productos. <a href="/products">Ver todos los productos</a>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer th:replace="~{layout :: footer}"></footer>
+</body>
+</html>

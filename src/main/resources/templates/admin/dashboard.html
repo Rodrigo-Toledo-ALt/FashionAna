@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{layout :: head(~{::title})}"> 
+    <title>Panel de Administración | FashionAna</title>
+</head>
+<body>
+    <header th:replace="~{layout :: header}"></header>
+
+    <main class="container py-4" th:fragment="content">
+        <h1 class="mb-4">Panel de Administración</h1>
+        
+        <div class="row">
+            <div class="col-md-6 col-lg-4 mb-4">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h5 class="card-title">Gestión de Productos</h5>
+                        <p class="card-text">Administra el catálogo de productos.</p>
+                        <a href="/products" class="btn btn-primary">Gestionar productos</a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-6 col-lg-4 mb-4">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h5 class="card-title">Gestión de Pedidos</h5>
+                        <p class="card-text">Visualiza y gestiona los pedidos de los clientes.</p>
+                        <a href="/orders" class="btn btn-primary">Gestionar pedidos</a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-6 col-lg-4 mb-4">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h5 class="card-title">Gestión de Clientes</h5>
+                        <p class="card-text">Administra la información de los clientes.</p>
+                        <a href="/customers" class="btn btn-primary">Gestionar clientes</a>
+                    </div>
+                </div>
+            </div>
+            
+            <div th:if="${session.role == 'ADMIN'}" class="col-md-6 col-lg-4 mb-4">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h5 class="card-title">Gestión de Empleados</h5>
+                        <p class="card-text">Administra la información de los empleados.</p>
+                        <a href="/employees" class="btn btn-primary">Gestionar empleados</a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-6 col-lg-4 mb-4">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h5 class="card-title">Informes y Estadísticas</h5>
+                        <p class="card-text">Visualiza informes de ventas y estadísticas.</p>
+                        <a href="#" class="btn btn-primary">Ver informes</a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-6 col-lg-4 mb-4">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h5 class="card-title">Gestión de Inventario</h5>
+                        <p class="card-text">Administra el inventario de productos.</p>
+                        <a href="#" class="btn btn-primary">Gestionar inventario</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer th:replace="~{layout :: footer}"></footer>
+</body>
+</html>

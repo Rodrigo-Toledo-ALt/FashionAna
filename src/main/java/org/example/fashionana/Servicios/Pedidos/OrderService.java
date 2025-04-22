@@ -14,4 +14,7 @@ public interface OrderService {
     List<Order> findByCustomerId(Long customerId);
     List<Order> findByStatus(OrderStatus status);
     Order updateOrderStatus(Long id, OrderStatus newStatus);
+    List<Order> findRecentOrdersByCustomerId(Long customerId, int limit);
+    List<Order> findRecentOrders(int limit);
+    int countAll();
 }

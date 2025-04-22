@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{layout :: head(~{::title})}"> 
+    <title>Panel de Cliente | FashionAna</title>
+</head>
+<body>
+    <header th:replace="~{layout :: header}"></header>
+
+    <main class="container py-4" th:fragment="content">
+        <h1 class="mb-4">Panel de Cliente</h1>
+        
+        <div class="row">
+            <div class="col-md-6 mb-4">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h5 class="card-title">Mis Pedidos</h5>
+                        <p class="card-text">Ver y gestionar todos tus pedidos.</p>
+                        <a th:href="@{/orders/customer/{id}(id=${session.customerId})}" class="btn btn-primary">Ver pedidos</a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-6 mb-4">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h5 class="card-title">Mi Perfil</h5>
+                        <p class="card-text">Actualiza tu información personal y direcciones de entrega.</p>
+                        <a th:href="@{/customers/{id}(id=${session.customerId})}" class="btn btn-primary">Ver perfil</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row">
+            <div class="col-md-6 mb-4">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h5 class="card-title">Catálogo de Productos</h5>
+                        <p class="card-text">Explora nuestra colección de productos.</p>
+                        <a href="/products" class="btn btn-primary">Ver productos</a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-6 mb-4">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h5 class="card-title">Métodos de Pago</h5>
+                        <p class="card-text">Gestiona tus métodos de pago guardados.</p>
+                        <a href="#" class="btn btn-primary">Gestionar métodos de pago</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer th:replace="~{layout :: footer}"></footer>
+</body>
+</html>

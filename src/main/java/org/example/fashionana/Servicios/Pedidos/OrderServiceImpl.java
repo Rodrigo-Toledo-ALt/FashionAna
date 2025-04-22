@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -85,5 +86,27 @@ public class OrderServiceImpl implements OrderService {
             return orderRepository.save(order);
         }
         return null;
+    }
+    
+    @Override
+    public List<Order> findRecentOrdersByCustomerId(Long customerId, int limit) {
+        return orderRepository.findAll().stream()
+                .filter(order -> order.getCustomer().getId().equals(customerId))
+                .sorted(Comparator.comparing(Order::getOrderDate).reversed())
+                .limit(limit)
+                .collect(Collectors.toList());
+    }
+    
+    @Override
+    public List<Order> findRecentOrders(int limit) {
+        return orderRepository.findAll().stream()
+                .sorted(Comparator.comparing(Order::getOrderDate).reversed())
+                .limit(limit)
+                .collect(Collectors.toList());
+    }
+    
+    @Override
+    public int countAll() {
+        return orderRepository.findAll().size();
     }
 }

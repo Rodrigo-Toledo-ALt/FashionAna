@@ -55,4 +55,9 @@ public class CustomerServiceImpl implements CustomerService {
                 .filter(customer -> customer.getEmail().equals(email))
                 .findFirst();
     }
+    
+    @Override
+    public int countAll() {
+        return customerRepository.findAll().size();
+    }
 }

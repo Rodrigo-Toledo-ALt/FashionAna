@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{layout :: head(~{::title})}"> 
+    <title th:text="${order.id} ? 'Editar Pedido' : 'Nuevo Pedido'">Pedido | FashionAna</title>
+</head>
+<body>
+    <header th:replace="~{layout :: header}"></header>
+
+    <main class="container py-4" th:fragment="content">
+        <div class="row justify-content-center">
+            <div class="col-lg-10">
+                <div class="card">
+                    <div class="card-header bg-primary text-white">
+                        <h2 class="mb-0" th:text="${order.id} ? 'Editar Pedido' : 'Nuevo Pedido'"></h2>
+                    </div>
+                    <div class="card-body">
+                        <form th:action="@{/orders}" th:object="${order}" method="post">
+                            <input type="hidden" th:field="*{id}">
+                            
+                            <div class="mb-3">
+                                <label for="customerId" class="form-label">Cliente <span class="text-danger">*</span></label>
+                                <select class="form-select" id="customerId" name="customer.id" required>
+                                    <option value="">Seleccionar cliente</option>
+                                    <option th:each="customer : ${customers}" 
+                                            th:value="${customer.id}" 
+                                            th:text="${customer.firstName + ' ' + customer.lastName + ' (' + customer.email + ')'}"
+                                            th:selected="${order.customer != null && order.customer.id == customer.id}"></option>
+                                </select>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label for="status" class="form-label">Estado <span class="text-danger">*</span></label>
+                                <select class="form-select" id="status" th:field="*{status}" required>
+                                    <option th:each="status : ${statuses}" 
+                                            th:value="${status}" 
+                                            th:text="${status}"></option>
+                                </select>
+                            </div>
+                            
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <label for="orderDate" class="form-label">Fecha del pedido <span class="text-danger">*</span></label>
+                                    <input type="datetime-local" class="form-control" id="orderDate" th:field="*{orderDate}" required>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="deliveryType" class="form-label">Tipo de entrega</label>
+                                    <select class="form-select" id="deliveryType" th:field="*{deliveryType}">
+                                        <option value="">Seleccionar tipo de entrega</option>
+                                        <option value="STANDARD">Estándar</option>
+                                        <option value="EXPRESS">Express</option>
+                                        <option value="PICKUP">Recoger en tienda</option>
+                                    </select>
+                                </div>
+                            </div>
+                            
+                            <div class="row mb-3">
+                                <div class="col-md-4">
+                                    <label for="subtotal" class="form-label">Subtotal <span class="text-danger">*</span></label>
+                                    <div class="input-group">
+                                        <span class="input-group-text">$</span>
+                                        <input type="number" class="form-control" id="subtotal" th:field="*{subtotal}" step="0.01" min="0" required>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="taxAmount" class="form-label">Impuestos</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text">$</span>
+                                        <input type="number" class="form-control" id="taxAmount" th:field="*{taxAmount}" step="0.01" min="0">
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="shippingCost" class="form-label">Costo de envío</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text">$</span>
+                                        <input type="number" class="form-control" id="shippingCost" th:field="*{shippingCost}" step="0.01" min="0">
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <label for="discount" class="form-label">Descuento</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text">$</span>
+                                        <input type="number" class="form-control" id="discount" th:field="*{discount}" step="0.01" min="0">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="totalAmount" class="form-label">Total <span class="text-danger">*</span></label>
+                                    <div class="input-group">
+                                        <span class="input-group-text">$</span>
+                                        <input type="number" class="form-control" id="totalAmount" th:field="*{totalAmount}" step="0.01" min="0" required>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label for="notes" class="form-label">Notas</label>
+                                <textarea class="form-control" id="notes" th:field="*{notes}" rows="3"></textarea>
+                            </div>
+                            
+                            <!-- Sección para productos del pedido (si se requiere) -->
+                            <div class="mb-3" th:if="${order.id != null}">
+                                <h5>Productos del pedido</h5>
+                                <p class="text-muted">Puedes gestionar los productos del pedido desde su panel de detalles.</p>
+                                <a th:if="${order.id != null}" th:href="@{/orders/{id}(id=${order.id})}" class="btn btn-outline-secondary">Gestionar productos</a>
+                            </div>
+                            
+                            <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                                <a th:href="@{/orders}" class="btn btn-secondary me-md-2">Cancelar</a>
+                                <button type="submit" class="btn btn-primary">Guardar</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer th:replace="~{layout :: footer}"></footer>
+</body>
+</html>

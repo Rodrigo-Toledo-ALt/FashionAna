@@ -12,4 +12,5 @@ public interface CustomerService {
     void deleteById(Long id);
     Optional<Customer> findByEmail(String email);
     boolean checkPassword(String plainPassword, String hashedPassword);
+    int countAll();
 }

@@ -11,4 +11,6 @@ public interface ProductService {
     Product save(Product product);
     void deleteById(Long id);
     List<Product> findByCategoryId(Long categoryId);
+
+    int countAll();
 }

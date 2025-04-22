@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{layout :: head(~{::title})}"> 
+    <title th:text="${product.name} + ' | FashionAna'">Producto | FashionAna</title>
+</head>
+<body>
+    <header th:replace="~{layout :: header}"></header>
+
+    <main class="container py-4" th:fragment="content">
+        <nav aria-label="breadcrumb" class="mb-4">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="/products">Productos</a></li>
+                <li class="breadcrumb-item"><a th:href="@{/products/category/{id}(id=${product.category.id})}" th:text="${product.category.name}"></a></li>
+                <li class="breadcrumb-item active" aria-current="page" th:text="${product.name}"></li>
+            </ol>
+        </nav>
+        
+        <div class="row">
+            <!-- Imagen del producto -->
+            <div class="col-md-6 mb-4">
+                <div class="card">
+                    <img th:if="${product.imageUrl}" th:src="${product.imageUrl}" class="img-fluid rounded" alt="Imagen del producto">
+                    <img th:unless="${product.imageUrl}" src="https://placehold.co/600x400?text=Sin+Imagen" class="img-fluid rounded" alt="Sin imagen">
+                </div>
+            </div>
+            
+            <!-- Detalles del producto -->
+            <div class="col-md-6">
+                <h1 th:text="${product.name}"></h1>
+                <p class="text-muted mb-3" th:text="'Categoría: ' + ${product.category.name}"></p>
+                <h3 class="text-primary mb-4" th:text="${#numbers.formatCurrency(product.price)}"></h3>
+                
+                <div class="mb-4">
+                    <h5>Descripción</h5>
+                    <p th:text="${product.description}"></p>
+                </div>
+                
+                <div class="mb-4">
+                    <h5>Especificaciones</h5>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item d-flex justify-content-between">
+                            <span>SKU:</span>
+                            <span th:text="${product.sku}"></span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between">
+                            <span>Stock:</span>
+                            <span th:text="${product.stockQuantity} + ' unidades'"></span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between">
+                            <span>Disponibilidad:</span>
+                            <span th:text="${product.stockQuantity > 0 ? 'En stock' : 'Agotado'}"
+                                  th:class="${product.stockQuantity > 0 ? 'text-success' : 'text-danger'}"></span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <!-- Opciones de compra -->
+                <div th:if="${product.stockQuantity > 0}" class="mb-4">
+                    <form th:action="@{/cart/add}" method="post">
+                        <input type="hidden" name="productId" th:value="${product.id}">
+                        <div class="mb-3">
+                            <label for="quantity" class="form-label">Cantidad</label>
+                            <input type="number" class="form-control" id="quantity" name="quantity" value="1" min="1" th:max="${product.stockQuantity}">
+                        </div>
+                        
+                        <!-- Selector de variantes si existen -->
+                        <div th:if="${product.variants != null && !product.variants.isEmpty()}" class="mb-3">
+                            <label for="variantId" class="form-label">Variante</label>
+                            <select class="form-select" id="variantId" name="variantId" required>
+                                <option value="">Selecciona una opción</option>
+                                <option th:each="variant : ${product.variants}" 
+                                        th:value="${variant.id}" 
+                                        th:text="${variant.name + ' - ' + #numbers.formatCurrency(variant.price)}"
+                                        th:disabled="${variant.stockQuantity <= 0}"></option>
+                            </select>
+                        </div>
+                        
+                        <button type="submit" class="btn btn-primary btn-lg w-100">Agregar al carrito</button>
+                    </form>
+                </div>
+                
+                <!-- Botones de acción para empleados -->
+                <div th:if="${session.userType == 'employee'}" class="mt-4">
+                    <div class="d-flex gap-2">
+                        <a th:href="@{/products/{id}/edit(id=${product.id})}" class="btn btn-warning">Editar producto</a>
+                        <a th:href="@{/products/{id}/delete(id=${product.id})}" class="btn btn-danger"
+                           onclick="return confirm('¿Estás seguro de eliminar este producto?')">Eliminar</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Productos relacionados -->
+        <div class="mt-5">
+            <h3 class="mb-4">Productos relacionados</h3>
+            <div class="row">
+                <div class="col-md-3 col-sm-6 mb-4" th:each="relatedProduct : ${relatedProducts}">
+                    <div class="card h-100">
+                        <img th:if="${relatedProduct.imageUrl}" th:src="${relatedProduct.imageUrl}" class="card-img-top" alt="Imagen del producto">
+                        <img th:unless="${relatedProduct.imageUrl}" src="https://placehold.co/300x200?text=Sin+Imagen" class="card-img-top" alt="Sin imagen">
+                        <div class="card-body">
+                            <h5 class="card-title" th:text="${relatedProduct.name}"></h5>
+                            <p class="card-text fw-bold" th:text="${#numbers.formatCurrency(relatedProduct.price)}"></p>
+                            <a th:href="@{/products/{id}(id=${relatedProduct.id})}" class="btn btn-outline-primary">Ver producto</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer th:replace="~{layout :: footer}"></footer>
+</body>
+</html>

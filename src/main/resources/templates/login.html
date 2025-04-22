@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Iniciar Sesión | FashionAna</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f8f9fa;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .login-container {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            padding: 2rem;
+            width: 100%;
+            max-width: 500px;
+        }
+        .login-logo {
+            text-align: center;
+            margin-bottom: 2rem;
+            font-size: 2rem;
+            font-weight: bold;
+            color: #ff385c;
+        }
+        .form-tabs {
+            display: flex;
+            margin-bottom: 1.5rem;
+        }
+        .form-tab {
+            flex: 1;
+            text-align: center;
+            padding: 0.75rem;
+            cursor: pointer;
+            border-bottom: 2px solid #dee2e6;
+        }
+        .form-tab.active {
+            border-bottom: 2px solid #ff385c;
+            font-weight: bold;
+        }
+        .tab-content {
+            padding-top: 1rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <div class="login-logo">FashionAna</div>
+        
+        <div th:if="${success}" class="alert alert-success" role="alert" th:text="${success}"></div>
+        <div th:if="${error}" class="alert alert-danger" role="alert" th:text="${error}"></div>
+        
+        <div class="form-tabs">
+            <div class="form-tab active" id="customer-tab">Cliente</div>
+            <div class="form-tab" id="employee-tab">Empleado</div>
+        </div>
+        
+        <div class="tab-content">
+            <!-- Formulario de inicio de sesión para clientes -->
+            <form id="customer-form" method="post" action="/login/customer" class="mb-3">
+                <div class="mb-3">
+                    <label for="customerEmail" class="form-label">Email</label>
+                    <input type="email" class="form-control" id="customerEmail" name="email" required>
+                </div>
+                <div class="mb-3">
+                    <label for="customerPassword" class="form-label">Contraseña</label>
+                    <input type="password" class="form-control" id="customerPassword" name="password" required>
+                </div>
+                <button type="submit" class="btn btn-primary w-100">Iniciar sesión</button>
+            </form>
+            
+            <!-- Formulario de inicio de sesión para empleados (inicialmente oculto) -->
+            <form id="employee-form" method="post" action="/login/employee" class="mb-3" style="display: none;">
+                <div class="mb-3">
+                    <label for="employeeEmail" class="form-label">Email</label>
+                    <input type="email" class="form-control" id="employeeEmail" name="email" required>
+                </div>
+                <div class="mb-3">
+                    <label for="employeePassword" class="form-label">Contraseña</label>
+                    <input type="password" class="form-control" id="employeePassword" name="password" required>
+                </div>
+                <button type="submit" class="btn btn-primary w-100">Iniciar sesión</button>
+            </form>
+        </div>
+        
+        <div class="text-center mt-3">
+            <p>¿No tienes una cuenta? <a href="/register">Regístrate aquí</a></p>
+            <a href="/" class="d-block mt-2">Volver a la página principal</a>
+        </div>
+    </div>
+
+    <script>
+        // Cambiar entre formularios de cliente y empleado
+        document.getElementById('customer-tab').addEventListener('click', function() {
+            document.getElementById('customer-tab').classList.add('active');
+            document.getElementById('employee-tab').classList.remove('active');
+            document.getElementById('customer-form').style.display = 'block';
+            document.getElementById('employee-form').style.display = 'none';
+        });
+        
+        document.getElementById('employee-tab').addEventListener('click', function() {
+            document.getElementById('employee-tab').classList.add('active');
+            document.getElementById('customer-tab').classList.remove('active');
+            document.getElementById('employee-form').style.display = 'block';
+            document.getElementById('customer-form').style.display = 'none';
+        });
+    </script>
+</body>
+</html>

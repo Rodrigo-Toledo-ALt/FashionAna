@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{layout :: head(~{::title})}"> 
+    <title th:text="${customer.id} ? 'Editar Cliente' : 'Nuevo Cliente'">Cliente | FashionAna</title>
+</head>
+<body>
+    <header th:replace="~{layout :: header}"></header>
+
+    <main class="container py-4" th:fragment="content">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="card">
+                    <div class="card-header bg-primary text-white">
+                        <h2 class="mb-0" th:text="${customer.id} ? 'Editar Cliente' : 'Nuevo Cliente'"></h2>
+                    </div>
+                    <div class="card-body">
+                        <form th:action="@{/customers}" th:object="${customer}" method="post">
+                            <input type="hidden" th:field="*{id}">
+                            
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <label for="firstName" class="form-label">Nombre <span class="text-danger">*</span></label>
+                                    <input type="text" class="form-control" id="firstName" th:field="*{firstName}" required>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="lastName" class="form-label">Apellidos <span class="text-danger">*</span></label>
+                                    <input type="text" class="form-control" id="lastName" th:field="*{lastName}" required>
+                                </div>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label for="email" class="form-label">Email <span class="text-danger">*</span></label>
+                                <input type="email" class="form-control" id="email" th:field="*{email}" required>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label for="password" class="form-label" th:text="${customer.id} ? 'Contraseña (dejar en blanco para mantener la actual)' : 'Contraseña'"></label>
+                                <input type="password" class="form-control" id="password" name="password" th:required="${customer.id == null}">
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label for="phone" class="form-label">Teléfono <span class="text-danger">*</span></label>
+                                <input type="tel" class="form-control" id="phone" th:field="*{phone}" required>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label for="birthDate" class="form-label">Fecha de nacimiento</label>
+                                <input type="date" class="form-control" id="birthDate" th:field="*{birthDate}">
+                            </div>
+                            
+                            <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                                <a th:href="@{/customers}" class="btn btn-secondary me-md-2">Cancelar</a>
+                                <button type="submit" class="btn btn-primary">Guardar</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer th:replace="~{layout :: footer}"></footer>
+</body>
+</html>

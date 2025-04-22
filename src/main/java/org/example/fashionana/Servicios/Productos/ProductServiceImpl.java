@@ -47,4 +47,11 @@ public class ProductServiceImpl implements ProductService {
                 .filter(product -> product.getCategory().getId().equals(categoryId))
                 .collect(Collectors.toList());
     }
+    
+
+    
+    @Override
+    public int countAll() {
+        return productRepository.findAll().size();
+    }
 }

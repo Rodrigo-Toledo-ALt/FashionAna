@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{layout :: head(~{::title})}"> 
+    <title>Clientes | FashionAna</title>
+</head>
+<body>
+    <header th:replace="~{layout :: header}"></header>
+
+    <main class="container py-4" th:fragment="content">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h1>Listado de Clientes</h1>
+            <a href="/customers/new" class="btn btn-primary"><i class="bi bi-plus-circle"></i> Nuevo Cliente</a>
+        </div>
+        
+        <div class="table-responsive">
+            <table class="table table-striped table-hover">
+                <thead class="table-dark">
+                    <tr>
+                        <th>ID</th>
+                        <th>Nombre</th>
+                        <th>Apellidos</th>
+                        <th>Email</th>
+                        <th>Teléfono</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="customer : ${customers}">
+                        <td th:text="${customer.id}"></td>
+                        <td th:text="${customer.firstName}"></td>
+                        <td th:text="${customer.lastName}"></td>
+                        <td th:text="${customer.email}"></td>
+                        <td th:text="${customer.phone}"></td>
+                        <td>
+                            <div class="btn-group" role="group">
+                                <a th:href="@{/customers/{id}(id=${customer.id})}" class="btn btn-sm btn-info">Ver</a>
+                                <a th:href="@{/customers/{id}/edit(id=${customer.id})}" class="btn btn-sm btn-warning">Editar</a>
+                                <a th:href="@{/customers/{id}/delete(id=${customer.id})}" class="btn btn-sm btn-danger"
+                                   onclick="return confirm('¿Estás seguro de eliminar este cliente?')">Eliminar</a>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr th:if="${customers.isEmpty()}">
+                        <td colspan="6" class="text-center">No hay clientes registrados</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </main>
+
+    <footer th:replace="~{layout :: footer}"></footer>
+</body>
+</html>
