@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
-@Table(name = "returns")
+@Table(name = "returns", schema = "BBDD_FashionDAM")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

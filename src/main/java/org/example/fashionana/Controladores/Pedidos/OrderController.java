@@ -50,6 +50,7 @@ public class OrderController {
         List<Customer> customers = customerService.findAll();
         model.addAttribute("customers", customers);
         model.addAttribute("statuses", OrderStatus.values());
+        model.addAttribute("deliveryTypes", org.example.fashionana.Modelos.DeliveryType.values());
         return "orders/form";
     }
 
@@ -67,6 +68,7 @@ public class OrderController {
             List<Customer> customers = customerService.findAll();
             model.addAttribute("customers", customers);
             model.addAttribute("statuses", OrderStatus.values());
+            model.addAttribute("deliveryTypes", org.example.fashionana.Modelos.DeliveryType.values());
             return "orders/form";
         } else {
             return "redirect:/orders";

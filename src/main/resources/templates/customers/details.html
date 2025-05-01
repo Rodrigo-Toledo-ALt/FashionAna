@@ -1,109 +1,136 @@
 <!DOCTYPE html>
 <html lang="es" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="~{layout :: head(~{::title})}"> 
+<head th:replace="~{layout :: head(~{::title})}">
     <title>Detalles de Cliente | FashionAna</title>
 </head>
 <body>
-    <header th:replace="~{layout :: header}"></header>
+<header th:replace="~{layout :: header}"></header>
 
-    <main class="container py-4" th:fragment="content">
-        <div class="d-flex justify-content-between align-items-center mb-4">
-            <h1>Detalles del Cliente</h1>
-            <div>
-                <a th:href="@{/customers/{id}/edit(id=${customer.id})}" class="btn btn-warning me-2">Editar</a>
-                <a th:href="@{/customers}" class="btn btn-secondary">Volver</a>
-            </div>
+<main class="container py-4" th:fragment="content">
+
+
+    <div th:if="${successMessage}" class="alert alert-success alert-dismissible fade show" role="alert">
+        <span th:text="${successMessage}"></span>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+
+    <div th:if="${errorMessage}" class="alert alert-danger alert-dismissible fade show" role="alert">
+        <span th:text="${errorMessage}"></span>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1>Detalles del Cliente</h1>
+        <div>
+            <a th:href="@{/customers/{id}/edit(id=${customer.id})}" class="btn btn-warning me-2">Editar</a>
+            <a th:href="@{/customers}" class="btn btn-secondary">Volver</a>
         </div>
-        
-        <div class="card mb-4">
-            <div class="card-header bg-primary text-white">
-                <h3 class="card-title mb-0">Información Personal</h3>
-            </div>
-            <div class="card-body">
-                <div class="row">
-                    <div class="col-md-6">
-                        <p><strong>Nombre:</strong> <span th:text="${customer.firstName}"></span></p>
-                        <p><strong>Apellidos:</strong> <span th:text="${customer.lastName}"></span></p>
-                        <p><strong>Email:</strong> <span th:text="${customer.email}"></span></p>
-                    </div>
-                    <div class="col-md-6">
-                        <p><strong>Teléfono:</strong> <span th:text="${customer.phone}"></span></p>
-                        <p><strong>Fecha de nacimiento:</strong> <span th:text="${#dates.format(customer.birthDate, 'dd/MM/yyyy')}"></span></p>
-                        <p><strong>Fecha de registro:</strong> <span th:text="${#dates.format(customer.registrationDate, 'dd/MM/yyyy')}"></span></p>
-                    </div>
+    </div>
+
+    <div class="card mb-4">
+        <div class="card-header bg-primary text-white">
+            <h3 class="card-title mb-0">Información Personal</h3>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-6">
+                    <p><strong>Nombre:</strong> <span th:text="${customer.firstName}"></span></p>
+                    <p><strong>Apellidos:</strong> <span th:text="${customer.lastName}"></span></p>
+                    <p><strong>Email:</strong> <span th:text="${customer.email}"></span></p>
+                </div>
+                <div class="col-md-6">
+                    <p><strong>Teléfono:</strong> <span th:text="${customer.phone}"></span></p>
+                    <p><strong>Fecha de nacimiento:</strong> <span th:text="${#temporals.format(customer.birthDate, 'dd/MM/yyyy')}"></span></p>
+                    <p><strong>Fecha de registro:</strong> <span th:text="${#temporals.format(customer.createdAt, 'dd/MM/yyyy')}"></span></p>
                 </div>
             </div>
         </div>
-        
-        <!-- Direcciones del cliente -->
-        <div class="card mb-4">
-            <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
-                <h3 class="card-title mb-0">Direcciones</h3>
-                <a href="#" class="btn btn-light btn-sm">Agregar dirección</a>
-            </div>
-            <div class="card-body">
-                <div th:if="${customer.addresses != null && !customer.addresses.isEmpty()}">
-                    <div class="mb-3" th:each="address : ${customer.addresses}">
-                        <div class="card">
-                            <div class="card-body">
-                                <h5 class="card-title" th:text="${address.addressType}"></h5>
-                                <p class="card-text">
-                                    <span th:text="${address.street}"></span><br>
-                                    <span th:text="${address.city}"></span>, <span th:text="${address.state}"></span><br>
-                                    <span th:text="${address.postalCode}"></span>, <span th:text="${address.country}"></span>
-                                </p>
-                                <div class="btn-group" role="group">
-                                    <a href="#" class="btn btn-sm btn-warning">Editar</a>
-                                    <a href="#" class="btn btn-sm btn-danger">Eliminar</a>
-                                </div>
+    </div>
+
+    <!-- Direcciones del cliente -->
+    <div class="card mb-4">
+        <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+            <h3 class="card-title mb-0">Direcciones</h3>
+            <a th:href="@{/customers/{customerId}/addresses/new(customerId=${customer.id})}" class="btn btn-light btn-sm">Agregar dirección</a>
+        </div>
+        <div class="card-body">
+            <div th:if="${customer.addresses != null && !customer.addresses.isEmpty()}">
+                <div class="mb-3" th:each="address : ${customer.addresses}">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between">
+                                <h5 class="card-title">
+                                    <span th:if="${address.isDefault}" class="badge bg-success me-2">Predeterminada</span>
+                                    <span th:if="${address.isBilling}" class="badge bg-info me-2">Facturación</span>
+                                    <span th:unless="${address.isBilling}" class="badge bg-secondary me-2">Envío</span>
+                                    Dirección
+                                </h5>
+                            </div>
+                            <p class="card-text">
+                                <span th:text="${address.street}"></span><br>
+                                <span th:text="${address.city}"></span>,
+                                <span th:if="${address.stateProvince}" th:text="${address.stateProvince}"></span><br>
+                                <span th:text="${address.postalCode}"></span>, <span th:text="${address.country}"></span>
+                            </p>
+                            <div class="btn-group" role="group">
+                                <a th:href="@{/customers/{customerId}/addresses/{addressId}/edit(customerId=${customer.id},addressId=${address.id})}" class="btn btn-sm btn-warning">Editar</a>
+                                <form th:action="@{/customers/{customerId}/addresses/{addressId}/delete(customerId=${customer.id},addressId=${address.id})}"
+                                      method="post" style="display:inline;">
+                                    <button type="submit" class="btn btn-danger"
+                                            onclick="return confirm('¿Estás seguro de eliminar esta dirección?')">Eliminar</button>
+                                </form>
+                                <a th:if="${!address.isDefault}"
+                                   th:href="@{/customers/{customerId}/addresses/{addressId}/setDefault(customerId=${customer.id},addressId=${address.id})}"
+                                   class="btn btn-sm btn-success">Establecer como predeterminada</a>
                             </div>
                         </div>
                     </div>
                 </div>
-                <p th:if="${customer.addresses == null || customer.addresses.isEmpty()}" class="text-muted">No hay direcciones registradas para este cliente.</p>
             </div>
+            <p th:if="${customer.addresses == null || customer.addresses.isEmpty()}" class="text-muted">No hay direcciones registradas para este cliente.</p>
         </div>
-        
-        <!-- Pedidos del cliente -->
-        <div class="card">
-            <div class="card-header bg-primary text-white">
-                <h3 class="card-title mb-0">Historial de pedidos</h3>
-            </div>
-            <div class="card-body">
-                <div th:if="${customer.orders != null && !customer.orders.isEmpty()}">
-                    <div class="table-responsive">
-                        <table class="table table-striped">
-                            <thead>
-                                <tr>
-                                    <th>ID</th>
-                                    <th>Fecha</th>
-                                    <th>Total</th>
-                                    <th>Estado</th>
-                                    <th>Acciones</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr th:each="order : ${customer.orders}">
-                                    <td th:text="${order.id}"></td>
-                                    <td th:text="${#dates.format(order.orderDate, 'dd/MM/yyyy')}"></td>
-                                    <td th:text="${#numbers.formatCurrency(order.totalAmount)}"></td>
-                                    <td th:text="${order.status}"></td>
-                                    <td>
-                                        <a th:href="@{/orders/{id}(id=${order.id})}" class="btn btn-sm btn-info">Ver detalles</a>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-                <p th:if="${customer.orders == null || customer.orders.isEmpty()}" class="text-muted">No hay pedidos registrados para este cliente.</p>
-                <div class="text-center mt-3">
-                    <a th:href="@{/orders/customer/{id}(id=${customer.id})}" class="btn btn-primary">Ver todos los pedidos</a>
-                </div>
-            </div>
-        </div>
-    </main>
+    </div>
 
-    <footer th:replace="~{layout :: footer}"></footer>
+    <!-- Pedidos del cliente -->
+    <div class="card">
+        <div class="card-header bg-primary text-white">
+            <h3 class="card-title mb-0">Historial de pedidos</h3>
+        </div>
+        <div class="card-body">
+            <div th:if="${customer.orders != null && !customer.orders.isEmpty()}">
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Fecha</th>
+                            <th>Total</th>
+                            <th>Estado</th>
+                            <th>Acciones</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="order : ${customer.orders}">
+                            <td th:text="${order.id}"></td>
+                            <td th:text="${#temporals.format(order.orderDate, 'dd/MM/yyyy')}"></td>
+                            <td th:text="${#numbers.formatCurrency(order.totalAmount)}"></td>
+                            <td th:text="${order.status}"></td>
+                            <td>
+                                <a th:href="@{/orders/{id}(id=${order.id})}" class="btn btn-sm btn-info">Ver detalles</a>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <p th:if="${customer.orders == null || customer.orders.isEmpty()}" class="text-muted">No hay pedidos registrados para este cliente.</p>
+            <div class="text-center mt-3">
+                <a th:href="@{/orders/customer/{id}(id=${customer.id})}" class="btn btn-primary">Ver todos los pedidos</a>
+            </div>
+        </div>
+    </div>
+</main>
+
+<footer th:replace="~{layout :: footer}"></footer>
 </body>
 </html>

@@ -9,7 +9,7 @@ import org.example.fashionana.Modelos.Pedidos.Order;
 import java.util.List;
 
 @Entity
-@Table(name = "addresses")
+@Table(name = "addresses", schema = "BBDD_FashionDAM")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

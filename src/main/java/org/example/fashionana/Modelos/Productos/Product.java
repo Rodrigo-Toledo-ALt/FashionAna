@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
-@Table(name = "products")
+@Table(name = "products", schema = "BBDD_FashionDAM")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -34,6 +34,9 @@ public class Product {
     @ManyToOne
     @JoinColumn(name = "category_id")
     private Category category;
+
+    @Column(name = "image_url", columnDefinition = "TEXT")
+    private String imageUrl;
 
     @Column(name = "created_at")
     private LocalDateTime createdAt;

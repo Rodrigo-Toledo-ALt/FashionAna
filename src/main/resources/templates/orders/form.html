@@ -44,47 +44,20 @@
                                 </div>
                                 <div class="col-md-6">
                                     <label for="deliveryType" class="form-label">Tipo de entrega</label>
-                                    <select class="form-select" id="deliveryType" th:field="*{deliveryType}">
+                                    <select class="form-select" id="deliveryType" th:field="*{deliveryType}" required>
                                         <option value="">Seleccionar tipo de entrega</option>
-                                        <option value="STANDARD">Estándar</option>
-                                        <option value="EXPRESS">Express</option>
-                                        <option value="PICKUP">Recoger en tienda</option>
+                                        <option th:each="type : ${deliveryTypes}" 
+                                                th:value="${type}" 
+                                                th:text="${type == T(org.example.fashionana.Modelos.DeliveryType).delivery ? 'Estándar' : 'Recoger en tienda'}">
+                                        </option>
                                     </select>
                                 </div>
                             </div>
                             
-                            <div class="row mb-3">
-                                <div class="col-md-4">
-                                    <label for="subtotal" class="form-label">Subtotal <span class="text-danger">*</span></label>
-                                    <div class="input-group">
-                                        <span class="input-group-text">$</span>
-                                        <input type="number" class="form-control" id="subtotal" th:field="*{subtotal}" step="0.01" min="0" required>
-                                    </div>
-                                </div>
-                                <div class="col-md-4">
-                                    <label for="taxAmount" class="form-label">Impuestos</label>
-                                    <div class="input-group">
-                                        <span class="input-group-text">$</span>
-                                        <input type="number" class="form-control" id="taxAmount" th:field="*{taxAmount}" step="0.01" min="0">
-                                    </div>
-                                </div>
-                                <div class="col-md-4">
-                                    <label for="shippingCost" class="form-label">Costo de envío</label>
-                                    <div class="input-group">
-                                        <span class="input-group-text">$</span>
-                                        <input type="number" class="form-control" id="shippingCost" th:field="*{shippingCost}" step="0.01" min="0">
-                                    </div>
-                                </div>
-                            </div>
+
                             
                             <div class="row mb-3">
-                                <div class="col-md-6">
-                                    <label for="discount" class="form-label">Descuento</label>
-                                    <div class="input-group">
-                                        <span class="input-group-text">$</span>
-                                        <input type="number" class="form-control" id="discount" th:field="*{discount}" step="0.01" min="0">
-                                    </div>
-                                </div>
+
                                 <div class="col-md-6">
                                     <label for="totalAmount" class="form-label">Total <span class="text-danger">*</span></label>
                                     <div class="input-group">

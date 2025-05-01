@@ -71,16 +71,10 @@
                     <tr th:each="order : ${orders}">
                         <td th:text="${order.id}"></td>
                         <td th:text="${order.customer != null ? order.customer.firstName + ' ' + order.customer.lastName : 'N/A'}"></td>
-                        <td th:text="${#dates.format(order.orderDate, 'dd/MM/yyyy HH:mm')}"></td>
+                        <td th:text="${#temporals.format(order.orderDate, 'dd/MM/yyyy HH:mm')}"></td>
                         <td th:text="${#numbers.formatCurrency(order.totalAmount)}"></td>
                         <td>
-                            <span class="badge" th:classappend="${
-                                order.status == T(org.example.fashionana.Modelos.OrderStatus).PENDING ? 'bg-warning' : 
-                                order.status == T(org.example.fashionana.Modelos.OrderStatus).PROCESSING ? 'bg-info' : 
-                                order.status == T(org.example.fashionana.Modelos.OrderStatus).SHIPPED ? 'bg-primary' : 
-                                order.status == T(org.example.fashionana.Modelos.OrderStatus).DELIVERED ? 'bg-success' : 
-                                order.status == T(org.example.fashionana.Modelos.OrderStatus).CANCELLED ? 'bg-danger' : 'bg-secondary'
-                            }" th:text="${order.status}"></span>
+                            <span class="badge" th:classappend="${order.statusClass}" th:text="${order.status}"></span>
                         </td>
                         <td>
                             <div class="btn-group" role="group">

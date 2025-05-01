@@ -11,7 +11,7 @@ import org.example.fashionana.Modelos.Productos.ProductVariant;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "inventory_transactions")
+@Table(name = "inventory_transactions", schema = "BBDD_FashionDAM")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

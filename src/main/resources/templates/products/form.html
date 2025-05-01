@@ -1,105 +1,121 @@
 <!DOCTYPE html>
 <html lang="es" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="~{layout :: head(~{::title})}"> 
+<head th:replace="~{layout :: head(~{::title})}">
     <title th:text="${product.id} ? 'Editar Producto' : 'Nuevo Producto'">Producto | FashionAna</title>
 </head>
 <body>
-    <header th:replace="~{layout :: header}"></header>
+<header th:replace="~{layout :: header}"></header>
 
-    <main class="container py-4" th:fragment="content">
-        <div class="row justify-content-center">
-            <div class="col-md-8">
-                <div class="card">
-                    <div class="card-header bg-primary text-white">
-                        <h2 class="mb-0" th:text="${product.id} ? 'Editar Producto' : 'Nuevo Producto'"></h2>
-                    </div>
-                    <div class="card-body">
-                        <form th:action="@{/products}" th:object="${product}" method="post" enctype="multipart/form-data">
-                            <input type="hidden" th:field="*{id}">
-                            
-                            <div class="mb-3">
-                                <label for="name" class="form-label">Nombre <span class="text-danger">*</span></label>
-                                <input type="text" class="form-control" id="name" th:field="*{name}" required>
+<main class="container py-4" th:fragment="content">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h2 class="mb-0" th:text="${product.id} ? 'Editar Producto' : 'Nuevo Producto'"></h2>
+                </div>
+                <div class="card-body">
+                    <form th:action="@{/products}" th:object="${product}" method="post" enctype="multipart/form-data">
+                        <input type="hidden" th:field="*{id}">
+
+                        <div class="mb-3">
+                            <label for="name" class="form-label">Nombre <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" id="name" th:field="*{name}" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="description" class="form-label">Descripción</label>
+                            <textarea class="form-control" id="description" th:field="*{description}" rows="3"></textarea>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="basePrice" class="form-label">Precio base <span class="text-danger">*</span></label>
+                            <div class="input-group">
+                                <span class="input-group-text">$</span>
+                                <input type="number" class="form-control" id="basePrice" th:field="*{basePrice}" step="0.01" min="0" required>
                             </div>
-                            
-                            <div class="mb-3">
-                                <label for="sku" class="form-label">SKU <span class="text-danger">*</span></label>
-                                <input type="text" class="form-control" id="sku" th:field="*{sku}" required>
-                            </div>
-                            
-                            <div class="mb-3">
-                                <label for="description" class="form-label">Descripción</label>
-                                <textarea class="form-control" id="description" th:field="*{description}" rows="3"></textarea>
-                            </div>
-                            
-                            <div class="row mb-3">
-                                <div class="col-md-6">
-                                    <label for="price" class="form-label">Precio <span class="text-danger">*</span></label>
-                                    <div class="input-group">
-                                        <span class="input-group-text">$</span>
-                                        <input type="number" class="form-control" id="price" th:field="*{price}" step="0.01" min="0" required>
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <label for="stockQuantity" class="form-label">Cantidad en stock <span class="text-danger">*</span></label>
-                                    <input type="number" class="form-control" id="stockQuantity" th:field="*{stockQuantity}" min="0" required>
-                                </div>
-                            </div>
-                            
-                            <div class="mb-3">
-                                <label for="categoryId" class="form-label">Categoría <span class="text-danger">*</span></label>
-                                <select class="form-select" id="categoryId" name="category.id" required>
-                                    <option value="">Seleccionar categoría</option>
-                                    <option th:each="category : ${categories}" 
-                                            th:value="${category.id}" 
-                                            th:text="${category.name}"
-                                            th:selected="${product.category != null && product.category.id == category.id}"></option>
-                                </select>
-                            </div>
-                            
-                            <div class="mb-3">
-                                <label for="imageFile" class="form-label">Imagen del producto</label>
-                                <input type="file" class="form-control" id="imageFile" name="imageFile" accept="image/*">
-                                <div th:if="${product.imageUrl}" class="mt-2">
-                                    <p>Imagen actual:</p>
-                                    <img th:src="${product.imageUrl}" class="img-thumbnail" style="max-height: 150px;" alt="Imagen actual">
-                                    <div class="form-check mt-2">
-                                        <input class="form-check-input" type="checkbox" id="removeImage" name="removeImage">
-                                        <label class="form-check-label" for="removeImage">Eliminar imagen</label>
-                                    </div>
+                            <small class="form-text text-muted">Este es el precio base del producto. Cada variante puede tener su propio precio específico.</small>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="category" class="form-label">Categoría <span class="text-danger">*</span></label>
+                            <select class="form-select" id="category" name="category.id" required>
+                                <option value="">Seleccionar categoría</option>
+                                <option th:each="category : ${categories}"
+                                        th:value="${category.id}"
+                                        th:text="${category.name}"
+                                        th:selected="${product.category != null && product.category.id == category.id}"></option>
+                            </select>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="imageFile" class="form-label">Imagen del producto</label>
+                            <input type="file" class="form-control" id="imageFile" name="imageFile" accept="image/*">
+                            <div th:if="${product.imageUrl}" class="mt-2">
+                                <p>Imagen actual:</p>
+                                <img th:src="${product.imageUrl}" class="img-thumbnail" style="max-height: 150px;" alt="Imagen actual">
+                                <div class="form-check mt-2">
+                                    <input class="form-check-input" type="checkbox" id="removeImage" name="removeImage">
+                                    <label class="form-check-label" for="removeImage">Eliminar imagen</label>
                                 </div>
                             </div>
-                            
-                            <div class="mb-3">
-                                <label for="featured" class="form-label">Estado</label>
-                                <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" id="active" th:field="*{active}">
-                                    <label class="form-check-label" for="active">Activo</label>
+                        </div>
+
+                        <!-- Sección para variantes del producto -->
+                        <div class="mb-3" th:if="${product.id != null}">
+                            <h5>Variantes del producto</h5>
+                            <p>Las variantes son las diferentes opciones específicas de este producto (tallas, colores, etc). Cada variante tiene su propio stock y puede tener un precio específico.</p>
+
+                            <!-- Tabla de variantes existentes si hay -->
+                            <div th:if="${product.variants != null && !product.variants.isEmpty()}" class="mb-3">
+                                <h6>Variantes existentes:</h6>
+                                <div class="table-responsive">
+                                    <table class="table table-sm table-striped">
+                                        <thead>
+                                        <tr>
+                                            <th>SKU</th>
+                                            <th>Talla</th>
+                                            <th>Color</th>
+                                            <th>Precio</th>
+                                            <th>Stock</th>
+                                            <th>Acciones</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr th:each="variant : ${product.variants}">
+                                            <td th:text="${variant.sku}"></td>
+                                            <td th:text="${variant.size}"></td>
+                                            <td th:text="${variant.color}"></td>
+                                            <td th:text="${#numbers.formatCurrency(variant.price)}"></td>
+                                            <td th:text="${variant.stockQuantity}"></td>
+                                            <td>
+                                                <a th:href="@{/products/{productId}/variants/{variantId}/edit(productId=${product.id},variantId=${variant.id})}" class="btn btn-sm btn-warning">Editar</a>
+                                                <a th:href="@{/products/{productId}/variants/{variantId}/delete(productId=${product.id},variantId=${variant.id})}" class="btn btn-sm btn-danger"
+                                                   onclick="return confirm('¿Estás seguro de eliminar esta variante?')">Eliminar</a>
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
                                 </div>
-                                <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" id="featured" th:field="*{featured}">
-                                    <label class="form-check-label" for="featured">Destacado</label>
-                                </div>
                             </div>
-                            
-                            <!-- Sección para variantes del producto (si se requiere) -->
-                            <div class="mb-3" th:if="${product.id != null}">
-                                <h5>Variantes del producto</h5>
-                                <p class="text-muted">Puedes gestionar las variantes del producto desde su panel de detalles.</p>
-                                <a th:if="${product.id != null}" th:href="@{/products/{id}(id=${product.id})}" class="btn btn-outline-secondary">Gestionar variantes</a>
-                            </div>
-                            
-                            <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-                                <a th:href="@{/products}" class="btn btn-secondary me-md-2">Cancelar</a>
-                                <button type="submit" class="btn btn-primary">Guardar</button>
-                            </div>
-                        </form>
-                    </div>
+
+                            <a th:href="@{/products/{id}/variants/new(id=${product.id})}" class="btn btn-outline-primary">Añadir nueva variante</a>
+                        </div>
+
+                        <div class="alert alert-info" th:if="${product.id == null}">
+                            <i class="bi bi-info-circle"></i> Podrás agregar variantes (tallas, colores, stock, etc.) después de guardar el producto base.
+                        </div>
+
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-end mt-4">
+                            <a th:href="@{/products}" class="btn btn-secondary me-md-2">Cancelar</a>
+                            <button type="submit" class="btn btn-primary">Guardar producto</button>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
-    </main>
+    </div>
+</main>
 
-    <footer th:replace="~{layout :: footer}"></footer>
+<footer th:replace="~{layout :: footer}"></footer>
 </body>
 </html>

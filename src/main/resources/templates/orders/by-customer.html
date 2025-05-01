@@ -33,7 +33,7 @@
                         <p><strong>Teléfono:</strong> <span th:text="${customer.phone}"></span></p>
                     </div>
                     <div class="col-md-6 text-md-end">
-                        <p th:if="${customer.registrationDate != null}"><strong>Cliente desde:</strong> <span th:text="${#dates.format(customer.registrationDate, 'dd/MM/yyyy')}"></span></p>
+                        <p th:if="${customer.createdAt != null}"><strong>Cliente desde:</strong> <span th:text="${#dates.format(customer.createdAt, 'dd/MM/yyyy')}"></span></p>
                         <a th:if="${session.userType == 'employee'}" th:href="@{/customers/{id}(id=${customer.id})}" class="btn btn-outline-primary">Ver perfil completo</a>
                     </div>
                 </div>

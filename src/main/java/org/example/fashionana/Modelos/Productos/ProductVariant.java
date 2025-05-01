@@ -11,7 +11,7 @@ import java.math.BigDecimal;
 import java.util.List;
 
 @Entity
-@Table(name = "product_variants")
+@Table(name = "product_variants", schema = "BBDD_FashionDAM")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

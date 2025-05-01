@@ -10,7 +10,7 @@ import org.example.fashionana.Modelos.Pedidos.Order;
 import java.util.List;
 
 @Entity
-@Table(name = "payment_methods")
+@Table(name = "payment_methods", schema = "BBDD_FashionDAM")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

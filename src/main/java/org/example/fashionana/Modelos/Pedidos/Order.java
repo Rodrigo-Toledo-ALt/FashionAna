@@ -18,7 +18,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
-@Table(name = "orders")
+@Table(name = "orders", schema = "BBDD_FashionDAM")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -87,6 +87,52 @@ public class Order {
     @PrePersist
     protected void onCreate() {
         orderDate = LocalDateTime.now();
-        status = OrderStatus.CREATED;
+        status = OrderStatus.created;
+    }
+
+    public String getStatusClass() {
+        if (status == null) return "bg-secondary";
+
+        switch(status) {
+            case created:
+            case confirmed:
+                return "bg-warning";
+            case preparing:
+            case ready_to_pickup:
+                return "bg-info";
+            case shipped:
+                return "bg-primary";
+            case delivered:
+                return "bg-success";
+            case cancelled:
+            case returned:
+                return "bg-danger";
+            default:
+                return "bg-secondary";
+        }
+    }
+
+    public String getProgressPercentage() {
+        if (status == null) return "0%";
+
+        switch(status) {
+            case created:
+                return "20%";
+            case confirmed:
+                return "40%";
+            case preparing:
+                return "60%";
+            case ready_to_pickup:
+                return "70%";
+            case shipped:
+                return "80%";
+            case delivered:
+                return "100%";
+            case cancelled:
+            case returned:
+                return "0%";
+            default:
+                return "0%";
+        }
     }
 }

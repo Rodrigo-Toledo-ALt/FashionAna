@@ -13,4 +13,8 @@ public interface ProductService {
     List<Product> findByCategoryId(Long categoryId);
 
     int countAll();
+
+    List<Product> findByNameContaining(String search);
+
+    List<Product> findByCategoryName(String categoryName);
 }

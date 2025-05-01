@@ -19,6 +19,8 @@ TRUNCATE TABLE
 RESTART IDENTITY CASCADE;
 
 
+
+
 create schema BBDD_FashionDAM;
 CREATE SCHEMA IF NOT EXISTS BBDD_FashionDAM;
 SET search_path TO BBDD_FashionDAM;
@@ -31,15 +33,16 @@ CREATE TABLE categories (
     description TEXT
 );
 
--- Product table
+-- Recrear la tabla de productos con el campo imageUrl
 CREATE TABLE products (
-    product_id SERIAL PRIMARY KEY,
-    name VARCHAR(200) NOT NULL,
-    description TEXT,
-    base_price DECIMAL(10, 2) NOT NULL,
-    category_id INTEGER REFERENCES categories(category_id),
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+                          product_id SERIAL PRIMARY KEY,
+                          name VARCHAR(200) NOT NULL,
+                          description TEXT,
+                          base_price DECIMAL(10, 2) NOT NULL,
+                          category_id INTEGER REFERENCES categories(category_id),
+                          image_url TEXT,
+                          created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                          updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 -- Product variants (size, color combinations)

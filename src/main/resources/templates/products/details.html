@@ -1,114 +1,158 @@
 <!DOCTYPE html>
 <html lang="es" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="~{layout :: head(~{::title})}"> 
+<head th:replace="~{layout :: head(~{::title})}">
     <title th:text="${product.name} + ' | FashionAna'">Producto | FashionAna</title>
 </head>
 <body>
-    <header th:replace="~{layout :: header}"></header>
+<header th:replace="~{layout :: header}"></header>
 
-    <main class="container py-4" th:fragment="content">
-        <nav aria-label="breadcrumb" class="mb-4">
-            <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="/products">Productos</a></li>
-                <li class="breadcrumb-item"><a th:href="@{/products/category/{id}(id=${product.category.id})}" th:text="${product.category.name}"></a></li>
-                <li class="breadcrumb-item active" aria-current="page" th:text="${product.name}"></li>
-            </ol>
-        </nav>
-        
+<main class="container py-4" th:fragment="content">
+    <nav aria-label="breadcrumb" class="mb-4">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/products">Productos</a></li>
+            <li class="breadcrumb-item"><a th:href="@{/products/category/{id}(id=${product.category.id})}" th:text="${product.category.name}"></a></li>
+            <li class="breadcrumb-item active" aria-current="page" th:text="${product.name}"></li>
+        </ol>
+    </nav>
+
+    <div class="row">
+        <!-- Imagen del producto -->
+        <div class="col-md-6 mb-4">
+            <div class="card">
+                <img th:if="${product.imageUrl}" th:src="${product.imageUrl}" class="img-fluid rounded" alt="Imagen del producto"
+                     style="width: 100%; height: 400px; object-fit: cover;">
+                <img th:unless="${product.imageUrl}" src="https://placehold.co/600x400?text=Sin+Imagen" class="img-fluid rounded" alt="Sin imagen"
+                     style="width: 100%; height: 400px; object-fit: cover;">
+            </div>
+        </div>
+
+        <!-- Detalles del producto -->
+        <div class="col-md-6">
+            <h1 th:text="${product.name}"></h1>
+            <p class="text-muted mb-3" th:text="'Categoría: ' + ${product.category.name}"></p>
+            <h3 class="text-primary mb-4" th:text="${#numbers.formatCurrency(product.basePrice)}"></h3>
+
+            <div class="mb-4">
+                <h5>Descripción</h5>
+                <p th:text="${product.description}"></p>
+            </div>
+
+            <!-- Opciones de compra -->
+            <div th:if="${product.variants != null && !product.variants.isEmpty()}" class="mb-4">
+                <div th:if="${message}" class="alert alert-success" th:text="${message}"></div>
+                <div th:if="${error}" class="alert alert-danger" th:text="${error}"></div>
+                
+                <form th:action="@{/cart/add}" method="post">
+                    <input type="hidden" name="customerId" th:value="${session.userId}" th:if="${session.userType == 'customer'}">
+                    <!-- Customer selection for employees -->
+                    <div class="mb-3" th:if="${session.userType == 'employee' && customers != null}">
+                        <label for="customerId" class="form-label">Cliente</label>
+                        <select class="form-select" id="customerId" name="customerId" required>
+                            <option value="">Selecciona un cliente</option>
+                            <option th:each="customer : ${customers}"
+                                    th:value="${customer.id}"
+                                    th:text="${customer.firstName + ' ' + customer.lastName}">
+                            </option>
+                        </select>
+                    </div>
+
+                    <!-- Selector de variantes -->
+                    <div class="mb-3">
+                        <label for="variantId" class="form-label">Selecciona talla y color</label>
+                        <select class="form-select" id="variantId" name="variantId" required>
+                            <option value="">Selecciona una opción</option>
+                            <option th:each="variant : ${product.variants}"
+                                    th:value="${variant.id}"
+                                    th:text="${'Talla ' + variant.size + ' - ' + variant.color + ' - ' + #numbers.formatCurrency(variant.price)}"
+                                    th:disabled="${variant.stockQuantity <= 0}">
+                            </option>
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="quantity" class="form-label">Cantidad</label>
+                        <input type="number" class="form-control" id="quantity" name="quantity" value="1" min="1">
+                    </div>
+
+                    <button type="submit" class="btn btn-primary btn-lg w-100" 
+                            th:disabled="${session.userType != 'customer' && session.userType != 'employee'}">
+                            Agregar al carrito
+                    </button>
+                    
+                    <div class="alert alert-info mt-3" th:if="${session.userType != 'customer' && session.userType != 'employee'}">
+                        <p>Debes iniciar sesión como cliente para agregar productos al carrito.</p>
+                        <a th:href="@{/login}" class="btn btn-outline-primary btn-sm">Iniciar sesión</a>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Mensaje si no hay variantes -->
+            <div th:if="${product.variants == null || product.variants.isEmpty()}" class="alert alert-warning">
+                No hay variantes disponibles para este producto.
+            </div>
+
+            <!-- Botones de acción para empleados -->
+            <div th:if="${session.userType == 'employee'}" class="mt-4">
+                <div class="d-flex gap-2">
+                    <a th:href="@{/products/{id}/edit(id=${product.id})}" class="btn btn-warning">Editar producto</a>
+                    <a th:href="@{/products/{id}/delete(id=${product.id})}" class="btn btn-danger"
+                       onclick="return confirm('¿Estás seguro de eliminar este producto?')">Eliminar</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tabla de variantes disponibles -->
+    <div class="mt-5" th:if="${product.variants != null && !product.variants.isEmpty()}">
+        <h3 class="mb-4">Variantes disponibles</h3>
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th>SKU</th>
+                    <th>Talla</th>
+                    <th>Color</th>
+                    <th>Precio</th>
+                    <th>Stock</th>
+                    <th>Disponibilidad</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="variant : ${product.variants}">
+                    <td th:text="${variant.sku}"></td>
+                    <td th:text="${variant.size}"></td>
+                    <td th:text="${variant.color}"></td>
+                    <td th:text="${#numbers.formatCurrency(variant.price)}"></td>
+                    <td th:text="${variant.stockQuantity}"></td>
+                    <td th:text="${variant.stockQuantity > 0 ? 'En stock' : 'Agotado'}"
+                        th:class="${variant.stockQuantity > 0 ? 'text-success' : 'text-danger'}"></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Productos relacionados -->
+    <div class="mt-5" th:if="${relatedProducts != null && !relatedProducts.isEmpty()}">
+        <h3 class="mb-4">Productos relacionados</h3>
         <div class="row">
-            <!-- Imagen del producto -->
-            <div class="col-md-6 mb-4">
-                <div class="card">
-                    <img th:if="${product.imageUrl}" th:src="${product.imageUrl}" class="img-fluid rounded" alt="Imagen del producto">
-                    <img th:unless="${product.imageUrl}" src="https://placehold.co/600x400?text=Sin+Imagen" class="img-fluid rounded" alt="Sin imagen">
-                </div>
-            </div>
-            
-            <!-- Detalles del producto -->
-            <div class="col-md-6">
-                <h1 th:text="${product.name}"></h1>
-                <p class="text-muted mb-3" th:text="'Categoría: ' + ${product.category.name}"></p>
-                <h3 class="text-primary mb-4" th:text="${#numbers.formatCurrency(product.price)}"></h3>
-                
-                <div class="mb-4">
-                    <h5>Descripción</h5>
-                    <p th:text="${product.description}"></p>
-                </div>
-                
-                <div class="mb-4">
-                    <h5>Especificaciones</h5>
-                    <ul class="list-group list-group-flush">
-                        <li class="list-group-item d-flex justify-content-between">
-                            <span>SKU:</span>
-                            <span th:text="${product.sku}"></span>
-                        </li>
-                        <li class="list-group-item d-flex justify-content-between">
-                            <span>Stock:</span>
-                            <span th:text="${product.stockQuantity} + ' unidades'"></span>
-                        </li>
-                        <li class="list-group-item d-flex justify-content-between">
-                            <span>Disponibilidad:</span>
-                            <span th:text="${product.stockQuantity > 0 ? 'En stock' : 'Agotado'}"
-                                  th:class="${product.stockQuantity > 0 ? 'text-success' : 'text-danger'}"></span>
-                        </li>
-                    </ul>
-                </div>
-                
-                <!-- Opciones de compra -->
-                <div th:if="${product.stockQuantity > 0}" class="mb-4">
-                    <form th:action="@{/cart/add}" method="post">
-                        <input type="hidden" name="productId" th:value="${product.id}">
-                        <div class="mb-3">
-                            <label for="quantity" class="form-label">Cantidad</label>
-                            <input type="number" class="form-control" id="quantity" name="quantity" value="1" min="1" th:max="${product.stockQuantity}">
-                        </div>
-                        
-                        <!-- Selector de variantes si existen -->
-                        <div th:if="${product.variants != null && !product.variants.isEmpty()}" class="mb-3">
-                            <label for="variantId" class="form-label">Variante</label>
-                            <select class="form-select" id="variantId" name="variantId" required>
-                                <option value="">Selecciona una opción</option>
-                                <option th:each="variant : ${product.variants}" 
-                                        th:value="${variant.id}" 
-                                        th:text="${variant.name + ' - ' + #numbers.formatCurrency(variant.price)}"
-                                        th:disabled="${variant.stockQuantity <= 0}"></option>
-                            </select>
-                        </div>
-                        
-                        <button type="submit" class="btn btn-primary btn-lg w-100">Agregar al carrito</button>
-                    </form>
-                </div>
-                
-                <!-- Botones de acción para empleados -->
-                <div th:if="${session.userType == 'employee'}" class="mt-4">
-                    <div class="d-flex gap-2">
-                        <a th:href="@{/products/{id}/edit(id=${product.id})}" class="btn btn-warning">Editar producto</a>
-                        <a th:href="@{/products/{id}/delete(id=${product.id})}" class="btn btn-danger"
-                           onclick="return confirm('¿Estás seguro de eliminar este producto?')">Eliminar</a>
+            <div class="col-md-3 col-sm-6 mb-4" th:each="relatedProduct : ${relatedProducts}">
+                <div class="card h-100">
+                    <img th:if="${relatedProduct.imageUrl}" th:src="${relatedProduct.imageUrl}" class="card-img-top" alt="Imagen del producto"
+                         style="width: 100%; height: 250px; object-fit: cover;">
+                    <img th:unless="${relatedProduct.imageUrl}" src="https://placehold.co/300x200?text=Sin+Imagen" class="card-img-top" alt="Sin imagen"
+                         style="width: 100%; height: 250px; object-fit: cover;">
+                    <div class="card-body">
+                        <h5 class="card-title" th:text="${relatedProduct.name}"></h5>
+                        <p class="card-text fw-bold" th:text="${#numbers.formatCurrency(relatedProduct.basePrice)}"></p>
+                        <a th:href="@{/products/{id}(id=${relatedProduct.id})}" class="btn btn-outline-primary">Ver producto</a>
                     </div>
                 </div>
             </div>
         </div>
-        
-        <!-- Productos relacionados -->
-        <div class="mt-5">
-            <h3 class="mb-4">Productos relacionados</h3>
-            <div class="row">
-                <div class="col-md-3 col-sm-6 mb-4" th:each="relatedProduct : ${relatedProducts}">
-                    <div class="card h-100">
-                        <img th:if="${relatedProduct.imageUrl}" th:src="${relatedProduct.imageUrl}" class="card-img-top" alt="Imagen del producto">
-                        <img th:unless="${relatedProduct.imageUrl}" src="https://placehold.co/300x200?text=Sin+Imagen" class="card-img-top" alt="Sin imagen">
-                        <div class="card-body">
-                            <h5 class="card-title" th:text="${relatedProduct.name}"></h5>
-                            <p class="card-text fw-bold" th:text="${#numbers.formatCurrency(relatedProduct.price)}"></p>
-                            <a th:href="@{/products/{id}(id=${relatedProduct.id})}" class="btn btn-outline-primary">Ver producto</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </main>
+    </div>
+</main>
 
-    <footer th:replace="~{layout :: footer}"></footer>
+<footer th:replace="~{layout :: footer}"></footer>
 </body>
 </html>
