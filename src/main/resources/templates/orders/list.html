@@ -14,6 +14,7 @@
             </div>
         </div>
         
+
         <!-- Filtros y búsqueda -->
         <div class="card mb-4">
             <div class="card-body">
@@ -22,19 +23,25 @@
                         <label for="status" class="form-label">Estado</label>
                         <select id="status" name="status" class="form-select">
                             <option value="">Todos los estados</option>
-                            <option th:each="status : ${statuses}" th:value="${status}" th:text="${status}"></option>
+                            <option th:each="status : ${statuses}"
+                                    th:value="${status}"
+                                    th:text="${status}"
+                                    th:selected="${status == selectedStatus}"></option>
                         </select>
                     </div>
                     <div class="col-md-4">
                         <label for="search" class="form-label">Buscar por ID o Cliente</label>
-                        <input type="text" class="form-control" id="search" name="search" placeholder="ID o nombre del cliente...">
+                        <input type="text" class="form-control" id="search" name="search"
+                               th:value="${searchQuery}" placeholder="ID o nombre del cliente...">
                     </div>
                     <div class="col-md-4">
                         <label for="dateRange" class="form-label">Rango de fechas</label>
                         <div class="input-group">
-                            <input type="date" class="form-control" id="startDate" name="startDate">
+                            <input type="date" class="form-control" id="startDate" name="startDate"
+                                   th:value="${selectedStartDate}">
                             <span class="input-group-text">a</span>
-                            <input type="date" class="form-control" id="endDate" name="endDate">
+                            <input type="date" class="form-control" id="endDate" name="endDate"
+                                   th:value="${selectedEndDate}">
                         </div>
                     </div>
                     <div class="col-12 text-end">

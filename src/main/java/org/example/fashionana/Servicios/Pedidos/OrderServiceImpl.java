@@ -104,7 +104,17 @@ public class OrderServiceImpl implements OrderService {
                 .limit(limit)
                 .collect(Collectors.toList());
     }
-    
+
+    @Override
+    public List<Order> findByCustomerNameContaining(String search) {
+        return orderRepository.findByCustomerNameContaining(search);
+    }
+
+    @Override
+    public List<Order> findByOrderDateBetween(LocalDateTime start, LocalDateTime end) {
+        return orderRepository.findByOrderDateBetween(start, end);
+    }
+
     @Override
     public int countAll() {
         return orderRepository.findAll().size();

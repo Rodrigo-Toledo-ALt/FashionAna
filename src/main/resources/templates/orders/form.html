@@ -40,7 +40,9 @@
                             <div class="row mb-3">
                                 <div class="col-md-6">
                                     <label for="orderDate" class="form-label">Fecha del pedido <span class="text-danger">*</span></label>
-                                    <input type="datetime-local" class="form-control" id="orderDate" th:field="*{orderDate}" required>
+                                    <input type="datetime-local" class="form-control" id="orderDate"
+                                           th:value="${#temporals.format(order.orderDate, 'yyyy-MM-dd''T''HH:mm')}"
+                                           name="orderDate" required>
                                 </div>
                                 <div class="col-md-6">
                                     <label for="deliveryType" class="form-label">Tipo de entrega</label>

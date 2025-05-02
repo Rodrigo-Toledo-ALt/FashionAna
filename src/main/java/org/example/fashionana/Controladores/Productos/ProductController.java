@@ -60,8 +60,7 @@ public class ProductController {
             products = productService.findAll();
         }
 
-        // Resto del código para ordenar y añadir atributos al modelo
-        // ...
+        
 
         // Cargar todas las categorías para el selector de filtro
         List<Category> categories = categoryService.findAll();

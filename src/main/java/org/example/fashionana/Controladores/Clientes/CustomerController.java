@@ -129,6 +129,11 @@ public class CustomerController {
                     addressService.unsetDefaultForCustomer(customerId);
                 }
             }
+            // Verificar si esta dirección se está marcando como dirección de facturación
+            if (Boolean.TRUE.equals(address.getIsBilling())) {
+                // Desactivar cualquier otra dirección de facturación
+                addressService.unsetBillingForCustomer(customerId);
+            }
 
             addressService.save(address);
             return "redirect:/customers/" + customerId;
@@ -160,6 +165,8 @@ public class CustomerController {
                 .filter(addr -> !addr.getId().equals(addressId))
                 .anyMatch(addr -> Boolean.TRUE.equals(addr.getIsBilling()));
 
+
+
         model.addAttribute("customer", customerOpt.get());
         model.addAttribute("address", currentAddress);
         model.addAttribute("isNew", false);
@@ -186,6 +193,11 @@ public class CustomerController {
                 addressService.unsetDefaultForCustomer(customerId);
             }
 
+            // Si se marca como dirección de facturación, desmarcar otras direcciones de facturación
+            if (Boolean.TRUE.equals(address.getIsBilling()) && !Boolean.TRUE.equals(existingAddress.get().getIsBilling())) {
+                addressService.unsetBillingForCustomer(customerId);
+            }
+
             addressService.save(address);
             return "redirect:/customers/" + customerId;
         } else {
@@ -199,7 +211,7 @@ public class CustomerController {
     /**
      * Elimina una dirección
      */
-    @GetMapping("/{customerId}/addresses/{addressId}/delete")
+    @PostMapping("/{customerId}/addresses/{addressId}/delete")
     public String deleteAddress(@PathVariable Long customerId, @PathVariable Long addressId, RedirectAttributes redirectAttributes) {
         Optional<Address> address = addressService.findById(addressId);
 

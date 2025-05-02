@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{layout :: head(~{::title})}">
+    <title th:text="${isNew} ? 'Nueva Dirección - ' + ${customer.firstName} + ' ' + ${customer.lastName} : 'Editar Dirección - ' + ${customer.firstName} + ' ' + ${customer.lastName}">Dirección | FashionAna</title>
+</head>
+<body>
+<header th:replace="~{layout :: header}"></header>
+
+<main class="container py-4">
+
+    <div th:if="${successMessage}" class="alert alert-success alert-dismissible fade show" role="alert">
+        <span th:text="${successMessage}"></span>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+
+    <div th:if="${errorMessage}" class="alert alert-danger alert-dismissible fade show" role="alert">
+        <span th:text="${errorMessage}"></span>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+
+
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h2 class="mb-0" th:text="${isNew} ? 'Nueva Dirección' : 'Editar Dirección'"></h2>
+                </div>
+                <div class="card-body">
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a th:href="@{/customers}">Clientes</a></li>
+                            <li class="breadcrumb-item"><a th:href="@{/customers/{id}(id=${customer.id})}" th:text="${customer.firstName + ' ' + customer.lastName}"></a></li>
+                            <li class="breadcrumb-item active" aria-current="page" th:text="${isNew} ? 'Nueva Dirección' : 'Editar Dirección'"></li>
+                        </ol>
+                    </nav>
+
+                    <!-- Alerta informativa sobre direcciones de facturación -->
+                    <div th:if="${isNew && hasBillingAddress}" class="alert alert-info">
+                        <i class="bi bi-info-circle"></i> El cliente ya tiene una dirección de facturación. Si marca esta dirección como "dirección de facturación",
+                        la otra dirección dejará de serlo.
+                    </div>
+
+                    <div th:if="${!isNew && isBillingAddress}" class="alert alert-info">
+                        <i class="bi bi-info-circle"></i> Esta es actualmente la dirección de facturación del cliente.
+                    </div>
+
+                    <div th:if="${!isNew && !isBillingAddress && otherBillingAddressExists}" class="alert alert-info">
+                        <i class="bi bi-info-circle"></i> El cliente ya tiene otra dirección de facturación. Si marca esta dirección como "dirección de facturación",
+                        la otra dirección dejará de serlo.
+                    </div>
+
+                    <!-- Formulario único con acción condicional -->
+                    <form th:with="formUrl=(${isNew} ? '/customers/' + ${customer.id} + '/addresses' : '/customers/' + ${customer.id} + '/addresses/' + ${address.id})"
+                          th:action="@{${formUrl}}" th:object="${address}" method="post">
+                        <input type="hidden" th:field="*{id}">
+
+                        <div class="mb-3">
+                            <label for="street" class="form-label">Calle y número <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" id="street" th:field="*{street}" required>
+                        </div>
+
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label for="city" class="form-label">Ciudad <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" id="city" th:field="*{city}" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="postalCode" class="form-label">Código Postal <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" id="postalCode" th:field="*{postalCode}" required>
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label for="stateProvince" class="form-label">Estado/Provincia</label>
+                                <input type="text" class="form-control" id="stateProvince" th:field="*{stateProvince}">
+                            </div>
+                            <div class="col-md-6">
+                                <label for="country" class="form-label">País <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" id="country" th:field="*{country}" required>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="isDefault" th:field="*{isDefault}">
+                                <label class="form-check-label" for="isDefault">
+                                    Establecer como dirección predeterminada
+                                </label>
+                                <div class="form-text">Si activa esta opción, cualquier otra dirección predeterminada dejará de serlo.</div>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="isBilling" th:field="*{isBilling}">
+                                <label class="form-check-label" for="isBilling">
+                                    Utilizar como dirección de facturación
+                                </label>
+                                <div class="form-text">Solo puede haber una dirección de facturación por cliente. Si activa esta opción, cualquier otra dirección de facturación dejará de serlo.</div>
+                            </div>
+                        </div>
+
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-end mt-4">
+                            <a th:href="@{/customers/{id}(id=${customer.id})}" class="btn btn-secondary me-md-2">Cancelar</a>
+                            <button type="submit" class="btn btn-primary" th:text="${isNew} ? 'Guardar dirección' : 'Actualizar dirección'"></button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+<footer th:replace="~{layout :: footer}"></footer>
+</body>
+</html>

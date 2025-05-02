@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{layout :: head(~{::title})}">
+    <title th:text="${isNew} ? 'Nueva Variante - ' + ${product.name} : 'Editar Variante - ' + ${product.name}">Variante de Producto | FashionAna</title>
+</head>
+<body>
+<header th:replace="~{layout :: header}"></header>
+
+<main class="container py-4" th:fragment="content">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h2 class="mb-0" th:text="${isNew} ? 'Nueva Variante - ' + ${product.name} : 'Editar Variante - ' + ${product.name}"></h2>
+                </div>
+                <div class="card-body">
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a th:href="@{/products}">Productos</a></li>
+                            <li class="breadcrumb-item"><a th:href="@{/products/{id}(id=${product.id})}" th:text="${product.name}"></a></li>
+                            <li class="breadcrumb-item active" aria-current="page" th:text="${isNew} ? 'Nueva Variante' : 'Editar Variante'"></li>
+                        </ol>
+                    </nav>
+
+                    <form th:action="@{/products/{productId}/variants(productId=${product.id})}" th:object="${variant}" method="post">
+                        <input type="hidden" th:field="*{id}">
+                        <!-- Hidden field to maintain relationship with product -->
+                        <input type="hidden" name="product.id" th:value="${product.id}">
+                        
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label for="sku" class="form-label">SKU <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" id="sku" th:field="*{sku}" required 
+                                       placeholder="Ej: PROD123-M-RED">
+                                <small class="form-text text-muted">Código único para esta variante</small>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="price" class="form-label">Precio <span class="text-danger">*</span></label>
+                                <div class="input-group">
+                                    <span class="input-group-text">$</span>
+                                    <input type="number" class="form-control" id="price" th:field="*{price}" 
+                                           step="0.01" min="0" required>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label for="size" class="form-label">Talla <span class="text-danger">*</span></label>
+                                <select class="form-select" id="size" th:field="*{size}" required>
+                                    <option value="">Seleccionar talla</option>
+                                    <option value="XS">XS</option>
+                                    <option value="S">S</option>
+                                    <option value="M">M</option>
+                                    <option value="L">L</option>
+                                    <option value="XL">XL</option>
+                                    <option value="XXL">XXL</option>
+                                    <option value="Única">Talla Única</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="color" class="form-label">Color <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" id="color" th:field="*{color}" required
+                                       placeholder="Ej: Rojo, Azul, Negro...">
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="stockQuantity" class="form-label">Cantidad en stock <span class="text-danger">*</span></label>
+                            <input type="number" class="form-control" id="stockQuantity" th:field="*{stockQuantity}" 
+                                   min="0" required>
+                        </div>
+
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-end mt-4">
+                            <a th:href="@{/products/{id}/edit(id=${product.id})}" class="btn btn-secondary me-md-2">Cancelar</a>
+                            <button type="submit" class="btn btn-primary">Guardar variante</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+<footer th:replace="~{layout :: footer}"></footer>
+</body>
+</html>

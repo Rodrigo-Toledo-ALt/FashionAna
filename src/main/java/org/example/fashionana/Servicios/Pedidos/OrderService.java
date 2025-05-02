@@ -3,6 +3,7 @@ package org.example.fashionana.Servicios.Pedidos;
 import org.example.fashionana.Modelos.Pedidos.Order;
 import org.example.fashionana.Modelos.OrderStatus;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -16,5 +17,7 @@ public interface OrderService {
     Order updateOrderStatus(Long id, OrderStatus newStatus);
     List<Order> findRecentOrdersByCustomerId(Long customerId, int limit);
     List<Order> findRecentOrders(int limit);
+    List<Order> findByCustomerNameContaining(String search);
+    List<Order> findByOrderDateBetween(LocalDateTime start, LocalDateTime end);
     int countAll();
 }
