@@ -1,5 +1,6 @@
 package org.example.fashionana.Controladores.Clientes;
 
+import jakarta.servlet.http.HttpSession;
 import org.example.fashionana.Excepciones.BusinessLogicException;
 import org.example.fashionana.Modelos.Clientes.Address;
 import org.example.fashionana.Modelos.Clientes.Customer;
@@ -47,7 +48,17 @@ public class CartController {
     }
 
     @GetMapping
-    public String viewCart(@RequestParam Long customerId, Model model) {
+    public String viewCart(HttpSession session, Model model) {
+
+        // Obtener el ID del cliente desde la sesión
+        Long customerId = (Long) session.getAttribute("customerId");
+
+        // Verificar si el usuario ha iniciado sesión
+        if (customerId == null) {
+            // Si no hay ID de cliente en la sesión, redirigir al login
+            return "redirect:/login";
+        }
+
         try {
             ShoppingCart cart = cartService.getCart(customerId);
             model.addAttribute("cart", cart);
@@ -59,13 +70,20 @@ public class CartController {
     }
 
     @PostMapping("/add")
-    public String addToCart(@RequestParam Long customerId,
-                            @RequestParam Long variantId,
-                            @RequestParam Integer quantity,
-                            RedirectAttributes redirectAttributes) {
+    public String addToCart(
+            @RequestParam Long variantId,
+            @RequestParam Integer quantity,
+            HttpSession session,
+            RedirectAttributes redirectAttributes) {
+
+        Long customerId = (Long) session.getAttribute("customerId");
+        if (customerId == null) {
+            return "redirect:/login";
+        }
+
         try {
             cartService.addToCart(customerId, variantId, quantity);
-            redirectAttributes.addFlashAttribute("message", "Product added to cart successfully");
+            redirectAttributes.addFlashAttribute("message", "Producto añadido al carrito exitosamente");
         } catch (BusinessLogicException e) {
             redirectAttributes.addFlashAttribute("error", e.getMessage());
         }

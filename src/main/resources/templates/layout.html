@@ -54,7 +54,7 @@
                     </ul>
                     <ul class="navbar-nav">
                         <li th:if="${session.userType == 'customer'}" class="nav-item">
-                            <a class="nav-link" th:href="@{/cart(customerId=${session.userId})}">
+                            <a class="nav-link" th:href="@{/cart}">
                                 <i class="bi bi-cart"></i> Carrito
                             </a>
                         </li>
