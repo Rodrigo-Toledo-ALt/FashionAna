@@ -195,10 +195,30 @@ public class InventoryController {
 
 
     @GetMapping("/admin/statistics")
-    public String showStatistics(Model model) {
+    public String showStatistics(
+            Model model,
+            @RequestParam(required = false) String transactionType,
+            @RequestParam(required = false) Long employeeId,
+            @RequestParam(required = false) String startDate,
+            @RequestParam(required = false) String endDate) {
+
+        // Filtrar las transacciones según los parámetros
+        List<InventoryTransaction> filteredTransactions;
+
+        if (transactionType != null && !transactionType.isEmpty()) {
+            filteredTransactions = inventoryService.findTransactionsByType(transactionType);
+        } else if (employeeId != null) {
+            filteredTransactions = inventoryService.findTransactionsByEmployee(employeeId);
+        } else if (startDate != null && !startDate.isEmpty() && endDate != null && !endDate.isEmpty()) {
+            LocalDateTime start = LocalDate.parse(startDate).atStartOfDay();
+            LocalDateTime end = LocalDate.parse(endDate).plusDays(1).atStartOfDay().minusSeconds(1);
+            filteredTransactions = inventoryService.findTransactionsByDateRange(start, end);
+        } else {
+            filteredTransactions = inventoryService.findAllTransactions();
+        }
+
         // Cargar transacciones
-        List<InventoryTransaction> transactions = inventoryService.findAllTransactions();
-        model.addAttribute("transactions", transactions);
+        model.addAttribute("transactions", filteredTransactions);
 
         // Cargar empleados para el filtro
         List<Employee> employees = employeeService.findAll();
@@ -220,34 +240,14 @@ public class InventoryController {
         List<Order> recentOrders = orderService.findRecentOrders(10);
         model.addAttribute("recentOrders", recentOrders);
 
+        // Mantener los valores de los filtros para cuando se recargue la página
+        model.addAttribute("transactionType", transactionType);
+        model.addAttribute("employeeId", employeeId);
+        model.addAttribute("selectedStartDate", startDate);
+        model.addAttribute("selectedEndDate", endDate);
+
         return "admin/stadistics";
     }
 
-    @GetMapping("/admin/statistics/filter")
-    public String filterTransactions(
-            @RequestParam(required = false) String transactionType,
-            @RequestParam(required = false) Long employeeId,
-            @RequestParam(required = false) String startDate,
-            @RequestParam(required = false) String endDate,
-            Model model) {
 
-        List<InventoryTransaction> filteredTransactions;
-
-        if (transactionType != null && !transactionType.isEmpty()) {
-            filteredTransactions = inventoryService.findTransactionsByType(transactionType);
-        } else if (employeeId != null) {
-            filteredTransactions = inventoryService.findTransactionsByEmployee(employeeId);
-        } else if (startDate != null && !startDate.isEmpty() && endDate != null && !endDate.isEmpty()) {
-            LocalDateTime start = LocalDate.parse(startDate).atStartOfDay();
-            LocalDateTime end = LocalDate.parse(endDate).plusDays(1).atStartOfDay().minusSeconds(1);
-            filteredTransactions = inventoryService.findTransactionsByDateRange(start, end);
-        } else {
-            filteredTransactions = inventoryService.findAllTransactions();
-        }
-
-        model.addAttribute("transactions", filteredTransactions);
-
-        // Volver a cargar el resto de datos para la vista
-        return showStatistics(model);
-    }
 }

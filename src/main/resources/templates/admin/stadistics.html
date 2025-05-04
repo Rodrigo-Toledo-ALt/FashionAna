@@ -50,15 +50,15 @@
           <h5 class="mb-0">Filtrar Transacciones</h5>
         </div>
         <div class="card-body">
-          <form th:action="@{/inventory/admin/statistics/filter}" method="get" class="row g-3">
+          <form th:action="@{/inventory/admin/statistics}" method="get" class="row g-3">
             <div class="col-md-3">
               <label for="transactionType" class="form-label">Tipo de Transacción</label>
               <select id="transactionType" name="transactionType" class="form-select">
                 <option value="">Todos los tipos</option>
-                <option value="Purchase">Compra</option>
-                <option value="Sale">Venta</option>
-                <option value="Return">Devolución</option>
-                <option value="Adjustment">Ajuste</option>
+                <option value="Purchase" th:selected="${transactionType == 'Purchase'}">Compra</option>
+                <option value="Sale" th:selected="${transactionType == 'Sale'}">Venta</option>
+                <option value="Return" th:selected="${transactionType == 'Return'}">Devolución</option>
+                <option value="Adjustment" th:selected="${transactionType == 'Adjustment'}">Ajuste</option>
               </select>
             </div>
             <div class="col-md-3">
@@ -67,10 +67,11 @@
                 <option value="">Todos los empleados</option>
                 <option th:each="employee : ${employees}"
                         th:value="${employee.id}"
-                        th:text="${employee.firstName + ' ' + employee.lastName}"></option>
+                        th:text="${employee.firstName + ' ' + employee.lastName}"
+                        th:selected="${employeeId != null && employeeId == employee.id}"></option>
               </select>
             </div>
-            <div class="col-md-2 d-flex align-items-end">
+            <div class="col-md-3 d-flex align-items-end">
               <button type="submit" class="btn btn-primary w-100">Filtrar</button>
             </div>
           </form>
