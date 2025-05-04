@@ -22,6 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.annotation.SessionScope;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -164,7 +165,9 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
         order.setPaymentMethod(paymentMethod);
         order.setDeliveryType(DeliveryType.valueOf(deliveryType));
         order.setTotalAmount(cart.getTotalAmount());
-        
+
+        order.setOrderItems(new ArrayList<>());
+
         // Save order to get ID
         order = orderRepository.save(order);
         
