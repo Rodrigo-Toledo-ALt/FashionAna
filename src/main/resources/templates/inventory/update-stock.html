@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{layout :: head(~{::title})}">
+  <title>Actualizar Stock | FashionAna</title>
+</head>
+<body>
+<header th:replace="~{layout :: header}"></header>
+
+<main class="container py-4" th:fragment="content">
+  <div th:if="${successMessage}" class="alert alert-success alert-dismissible fade show" role="alert">
+    <span th:text="${successMessage}"></span>
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+  </div>
+
+  <div th:if="${errorMessage}" class="alert alert-danger alert-dismissible fade show" role="alert">
+    <span th:text="${errorMessage}"></span>
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+  </div>
+
+  <nav aria-label="breadcrumb" class="mb-4">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a href="/inventory">Inventario</a></li>
+      <li class="breadcrumb-item active" aria-current="page">Actualizar Stock</li>
+    </ol>
+  </nav>
+
+  <div class="row justify-content-center">
+    <div class="col-md-8">
+      <div class="card">
+        <div class="card-header bg-primary text-white">
+          <h2 class="mb-0">Actualizar Stock</h2>
+        </div>
+        <div class="card-body">
+          <div class="alert alert-info mb-4">
+            <div class="row">
+              <div class="col-md-6">
+                <p><strong>Producto:</strong> <span th:text="${variant.product.name}"></span></p>
+                <p><strong>Variante:</strong> <span th:text="${variant.size + ' - ' + variant.color}"></span></p>
+                <p><strong>SKU:</strong> <span th:text="${variant.sku}"></span></p>
+              </div>
+              <div class="col-md-6">
+                <p><strong>Stock Actual:</strong> <span th:text="${variant.stockQuantity}"></span></p>
+                <p><strong>Precio:</strong> <span th:text="${#numbers.formatCurrency(variant.price)}"></span></p>
+              </div>
+            </div>
+          </div>
+
+          <form th:action="@{/inventory/update-stock}" method="post">
+            <input type="hidden" name="variantId" th:value="${variant.id}">
+
+            <div class="mb-3">
+              <label for="newStock" class="form-label">Nuevo stock <span class="text-danger">*</span></label>
+              <input type="number" class="form-control" id="newStock" name="newStock"
+                     min="0" th:value="${variant.stockQuantity}" required>
+              <div class="form-text">Ingrese la cantidad total que debe estar disponible en el inventario.</div>
+            </div>
+
+            <div class="mb-3">
+              <label for="operation" class="form-label">Tipo de operación <span class="text-danger">*</span></label>
+              <select class="form-select" id="operation" name="operation" required>
+                <option value="set">Establecer valor exacto</option>
+                <option value="add">Añadir al stock actual</option>
+                <option value="subtract">Reducir del stock actual</option>
+              </select>
+              <div class="form-text">
+                "Establecer valor exacto" cambiará el stock al valor indicado.<br>
+                "Añadir al stock actual" sumará el valor indicado al stock actual.<br>
+                "Reducir del stock actual" restará el valor indicado del stock actual.
+              </div>
+            </div>
+
+            <div class="mb-3">
+              <label for="notes" class="form-label">Razón del cambio <span class="text-danger">*</span></label>
+              <textarea class="form-control" id="notes" name="notes" rows="3" required
+                        placeholder="Explique por qué está modificando el stock (ej: nueva entrega, ajuste de inventario, corrección de error, etc.)"></textarea>
+            </div>
+
+            <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+              <a href="/inventory" class="btn btn-secondary me-md-2">Cancelar</a>
+              <button type="submit" class="btn btn-primary">Guardar cambios</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<footer th:replace="~{layout :: footer}"></footer>
+
+<script>
+  // Script para actualizar la etiqueta del campo según la operación seleccionada
+  document.addEventListener('DOMContentLoaded', function() {
+    const operationSelect = document.getElementById('operation');
+    const newStockLabel = document.querySelector('label[for="newStock"]');
+    const newStockInput = document.getElementById('newStock');
+    const newStockHelp = newStockInput.nextElementSibling;
+
+    operationSelect.addEventListener('change', function() {
+      const operation = this.value;
+
+      switch(operation) {
+        case 'set':
+          newStockLabel.textContent = 'Nuevo stock *';
+          newStockHelp.textContent = 'Ingrese la cantidad total que debe estar disponible en el inventario.';
+          break;
+        case 'add':
+          newStockLabel.textContent = 'Cantidad a añadir *';
+          newStockHelp.textContent = 'Ingrese la cantidad que desea añadir al stock actual.';
+          newStockInput.value = '';
+          break;
+        case 'subtract':
+          newStockLabel.textContent = 'Cantidad a reducir *';
+          newStockHelp.textContent = 'Ingrese la cantidad que desea reducir del stock actual.';
+          newStockInput.value = '';
+          break;
+      }
+    });
+  });
+</script>
+</body>
+</html>
