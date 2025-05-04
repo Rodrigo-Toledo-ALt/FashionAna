@@ -1,11 +1,10 @@
 package org.example.fashionana.Controladores.Clientes;
 
 import jakarta.servlet.http.HttpSession;
+import org.example.fashionana.DTOs.CartDTO;
+import org.example.fashionana.DTOs.CartItemDTO;
 import org.example.fashionana.Excepciones.BusinessLogicException;
-import org.example.fashionana.Modelos.Clientes.Address;
-import org.example.fashionana.Modelos.Clientes.Customer;
-import org.example.fashionana.Modelos.Clientes.PaymentMethod;
-import org.example.fashionana.Modelos.Clientes.ShoppingCart;
+import org.example.fashionana.Modelos.Clientes.*;
 import org.example.fashionana.Modelos.DeliveryType;
 import org.example.fashionana.Modelos.Pedidos.Order;
 import org.example.fashionana.Repositorios.Clientes.PaymentMethodRepository;
@@ -21,6 +20,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -87,7 +88,7 @@ public class CartController {
         } catch (BusinessLogicException e) {
             redirectAttributes.addFlashAttribute("error", e.getMessage());
         }
-        return "redirect:/products/details?id=" + variantId;
+        return "redirect:/products";
     }
 
     @PostMapping("/update")
@@ -96,10 +97,34 @@ public class CartController {
                                             @RequestParam Long variantId,
                                             @RequestParam Integer quantity) {
         try {
+            // Obtener el carrito actualizado
             ShoppingCart cart = cartService.updateCartItem(customerId, variantId, quantity);
-            return ResponseEntity.ok(cart);
+
+            // Convertir el carrito a DTO
+            CartDTO cartDTO = new CartDTO();
+            cartDTO.setCustomerId(customerId);
+            cartDTO.setTotalItems(cart.getTotalItems());
+            cartDTO.setTotalAmount(cart.getTotalAmount());
+
+            // Convertir los items del carrito a DTOs
+            List<CartItemDTO> itemDTOs = new ArrayList<>();
+            for (CartItem item : cart.getItems()) {
+                CartItemDTO itemDTO = new CartItemDTO();
+                itemDTO.setVariantId(item.getVariant().getId());
+                itemDTO.setProductName(item.getVariant().getProduct().getName());
+                itemDTO.setSize(item.getVariant().getSize());
+                itemDTO.setColor(item.getVariant().getColor());
+                itemDTO.setQuantity(item.getQuantity());
+                itemDTO.setPrice(item.getPrice());
+                itemDTO.setSubtotal(item.getSubtotal());
+                itemDTOs.add(itemDTO);
+            }
+            cartDTO.setItems(itemDTOs);
+
+            return ResponseEntity.ok(cartDTO);
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(Collections.singletonMap("error", e.getMessage()));
         }
     }
 
