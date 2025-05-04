@@ -48,8 +48,8 @@
                         </div>
 
                         <div class="mb-3">
-                            <label for="imageFile" class="form-label">Imagen del producto</label>
-                            <input type="file" class="form-control" id="imageFile" name="imageFile" accept="image/*">
+                            <label for="imageUrl" class="form-label">Imagen del producto (Url)</label>
+                            <input type="text" class="form-control" id="imageUrl" name="imageUrl" accept="image/*">
                             <div th:if="${product.imageUrl}" class="mt-2">
                                 <p>Imagen actual:</p>
                                 <img th:src="${product.imageUrl}" class="img-thumbnail" style="max-height: 150px;" alt="Imagen actual">

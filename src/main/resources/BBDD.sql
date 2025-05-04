@@ -231,27 +231,28 @@ INSERT INTO categories (name, description) VALUES
     ('Ropa deportiva', 'Ropa atlética y orientada a deportes');
 
 -- Insertar datos en productos
-INSERT INTO products (name, description, base_price, category_id) VALUES
-    ('Camiseta Cuello Redondo Clásica', 'Camiseta suave de algodón con cuello redondo en varios colores', 19.99, 1),
-    ('Camiseta Cuello V', 'Camiseta cómoda de algodón con cuello en V', 19.99, 1),
-    ('Camiseta con Estampado Gráfico', 'Camiseta de algodón con diseños gráficos modernos', 24.99, 1),
-    ('Vaqueros Slim Fit', 'Vaqueros modernos slim fit con comodidad elástica', 49.99, 2),
-    ('Vaqueros Regular Fit', 'Vaqueros clásicos regular fit cómodos', 45.99, 2),
-    ('Vaqueros Desgastados', 'Vaqueros de moda desgastados', 59.99, 2),
-    ('Vestido Floral de Verano', 'Vestido ligero con patrón floral perfecto para verano', 69.99, 3),
-    ('Vestido de Cóctel', 'Vestido elegante para ocasiones especiales', 89.99, 3),
-    ('Vestido Maxi', 'Vestido largo y cómodo para uso casual', 79.99, 3),
-    ('Chaqueta de Cuero', 'Chaqueta clásica de cuero con forro cálido', 149.99, 4),
-    ('Abrigo Acolchado', 'Abrigo cálido acolchado para clima invernal', 129.99, 4),
-    ('Chaqueta Vaquera', 'Chaqueta vaquera versátil para conjuntos casuales', 79.99, 4),
-    ('Cinturón de Cuero', 'Cinturón de cuero genuino con hebilla clásica', 29.99, 5),
-    ('Bufanda de Invierno', 'Bufanda tejida cálida para invierno', 24.99, 5),
-    ('Gorra de Béisbol', 'Gorra ajustable de algodón con diferentes diseños', 19.99, 5),
-    ('Zapatillas Deportivas', 'Zapatillas cómodas para correr y entrenar', 89.99, 6),
-    ('Botas de Cuero', 'Botas resistentes de cuero para temporada fría', 119.99, 6),
-    ('Sandalias de Verano', 'Sandalias ligeras y cómodas para la playa', 39.99, 6),
-    ('Conjunto Deportivo', 'Conjunto de pantalón y sudadera para actividades deportivas', 79.99, 7),
-    ('Leggings Deportivos', 'Leggings elásticos para fitness y yoga', 44.99, 7);
+INSERT INTO products (name, description, base_price, category_id, image_url) VALUES
+    ('Camiseta Cuello Redondo Clásica', 'Camiseta suave de algodón con cuello redondo en varios colores', 19.99, 1, 'https://m.media-amazon.com/images/I/61aempbR+IL._AC_SX679_.jpg'),
+    ('Camiseta Cuello V', 'Camiseta cómoda de algodón con cuello en V', 19.99, 1, 'https://encrypted-tbn1.gstatic.com/shopping?q=tbn:ANd9GcTGILtovbgL6XCjY1Dsv_HHOFQZ9eGmVxNDMCaUNe7ne4im_tU_6SraF9e_AjMhTSmN8OOR_z0ggA-X7-17yjFtWYFRX7WpmJRAeMfuuCsSlRQnZK3sTvJboQ'),
+    ('Camiseta con Estampado Gráfico', 'Camiseta de algodón con diseños gráficos modernos', 24.99, 1, 'https://encrypted-tbn1.gstatic.com/shopping?q=tbn:ANd9GcS3iBbs9lbpAvjQAqwHmVsdove7cnNHi_8-JQxJPqR7ggwAzmeeix-fvRO5xxTS_dmGjBx4xTFga7aZpP0aFY3DTsWmWvGCni2jd_voqRzXaWpGJG_LhpsAzw'),
+    ('Vaqueros Slim Fit', 'Vaqueros modernos slim fit con comodidad elástica', 49.99, 2, 'https://encrypted-tbn1.gstatic.com/shopping?q=tbn:ANd9GcS2O_mPe8vod7LbtP7qYBkBTnHanNsqIb0HNz_w2kc4kw2diaWShIvpNN5lAb6CpPC9EULPPG8mJR0OqUO2LZYRrWCXO0yX-VUkgnhzuiFGPciwEz2zC9y5'),
+    ('Vaqueros Regular Fit', 'Vaqueros clásicos regular fit cómodos', 45.99, 2, 'https://encrypted-tbn2.gstatic.com/shopping?q=tbn:ANd9GcSO5HbzVwHrFbc0nPTrJt0jlBZJBi3Wfa-y14Qb4qW8m0Pns2AJ1hOYb-B-8qc7eicgdJ8gA48yNnvYpethNcryGwl27nm_fwoQtiTQgYVJwAO-WgYwb8mj'),
+    ('Vaqueros Desgastados', 'Vaqueros de moda desgastados', 59.99, 2, 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTXLuMUnEVrbdismZWfEfbVGQ7ZXtK7mwsYrQ&s'),
+    ('Vestido Floral de Verano', 'Vestido ligero con patrón floral perfecto para verano', 69.99, 3, 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTp0TOemt7Z9XBDLGE79e87AieQ50JKqGDRXQ&s'),
+    ('Vestido de Cóctel', 'Vestido elegante para ocasiones especiales', 89.99, 3, NULL),
+    ('Vestido Maxi', 'Vestido largo y cómodo para uso casual', 79.99, 3, 'https://sevilla.abc.es/estilo/bulevarsur//wp-content/uploads/sites/14/2023/06/maxi-vestido-largo-zara.jpg'),
+    ('Chaqueta de Cuero', 'Chaqueta clásica de cuero con forro cálido', 149.99, 4, 'https://images.jackjones.com/12255362/4482285/003/jackjones-jorcasablancaleatherjacket-negra.jpg?v=cc2d84bb4ca4ccd55b4d2a63c74f2f96&format=webp&width=1280&quality=90&key=25-0-3'),
+    ('Abrigo Acolchado', 'Abrigo cálido acolchado para clima invernal', 129.99, 4, 'https://cdn.palbincdn.com/users/6490/images/T3129-abrigo-acolchado-hombre-hrom-tanta_casa-reinal_3-1662845291.jpg'),
+    ('Chaqueta Vaquera', 'Chaqueta vaquera versátil para conjuntos casuales', 79.99, 4, 'https://img01.ztat.net/article/spp-media-p1/3f8e8c288520439393bcc40d7959fb59/6b122d7e75e2458b8fca43340e7ed3ed.jpg?imwidth=1800'),
+    ('Cinturón de Cuero', 'Cinturón de cuero genuino con hebilla clásica', 29.99, 5, 'https://i.etsystatic.com/15408998/r/il/cef568/3285191696/il_570xN.3285191696_9v1e.jpg'),
+    ('Bufanda de Invierno', 'Bufanda tejida cálida para invierno', 24.99, 5, 'https://m.media-amazon.com/images/I/81zMJSDaZhL._AC_UY1000_.jpg'),
+    ('Gorra de Béisbol', 'Gorra ajustable de algodón con diferentes diseños', 19.99, 5, 'https://i8.amplience.net/t/jpl/jdes_product_list?plu=jd_757592_al&qlt=85&qlt=92&w=320&h=320&v=1&fmt=auto'),
+    ('Zapatillas Deportivas', 'Zapatillas cómodas para correr y entrenar', 89.99, 6, 'https://encrypted-tbn1.gstatic.com/shopping?q=tbn:ANd9GcQ_SDdGnEKb8W3Z_Jv_7ZGc2p-C2nSumKbGi7x7Z24W4-TCVXBhY5iVYLmG1-zgWLurnvuuB8W6xvKQt2VM3YjLgDNhBK4cg7LrbakMwqUDPv3cs999Z7HL'),
+    ('Botas de Cuero', 'Botas resistentes de cuero para temporada fría', 119.99, 6, NULL),
+    ('Sandalias de Verano', 'Sandalias ligeras y cómodas para la playa', 39.99, 6, 'https://www.rominas.eu/cdn/shop/files/032-sesion-rominas-elche-ss24-DSB01996_c7a72765-4686-4f48-9c36-fb2272c9e72d_533x.jpg?v=1718964844'),
+    ('Conjunto Deportivo', 'Conjunto de pantalón y sudadera para actividades deportivas', 79.99, 7, 'https://s.alicdn.com/@sc04/kf/U3da287732fce49db8408a87c57fb4460Y.jpg_720x720q50.jpg'),
+    ('Leggings Deportivos', 'Leggings elásticos para fitness y yoga', 44.99, 7, 'https://leonisa.es/cdn/shop/files/195627_700_1200X1500_1_960x.jpg?v=1726059604');
+
 
 -- Insertar variantes de productos
 INSERT INTO product_variants (product_id, size, color, stock_quantity, price, sku) VALUES
