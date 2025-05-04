@@ -61,4 +61,6 @@ public interface InventoryTransactionRepository extends JpaRepository<InventoryT
      */
     @Query("SELECT t.transactionType, SUM(t.quantity) FROM InventoryTransaction t GROUP BY t.transactionType")
     List<Object[]> getTransactionSummaryByType();
+
+    List<InventoryTransaction> findByTransactionTypeAndTransactionDateBetween(String sale, LocalDateTime start, LocalDateTime end);
 }

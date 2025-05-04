@@ -1,9 +1,12 @@
 package org.example.fashionana.Modelos.Productos;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 import org.example.fashionana.Modelos.Inventario_Empleados.InventoryTransaction;
 import org.example.fashionana.Modelos.Pedidos.OrderItem;
 
@@ -14,6 +17,7 @@ import java.util.List;
 @Table(name = "product_variants", schema = "BBDD_FashionDAM")
 @Data
 @NoArgsConstructor
+@ToString(exclude = "inventoryTransactions") // evita recursión
 @AllArgsConstructor
 public class ProductVariant {
 

@@ -2,10 +2,12 @@ package org.example.fashionana.Modelos.Inventario_Empleados;
 
 
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 import org.example.fashionana.Modelos.Productos.ProductVariant;
 
 import java.time.LocalDateTime;
@@ -15,6 +17,7 @@ import java.time.LocalDateTime;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString(exclude = "variant") // evita recursión inversa
 public class InventoryTransaction {
 
     @Id

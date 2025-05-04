@@ -34,16 +34,6 @@
                         <input type="text" class="form-control" id="search" name="search"
                                th:value="${searchQuery}" placeholder="ID o nombre del cliente...">
                     </div>
-                    <div class="col-md-4">
-                        <label for="dateRange" class="form-label">Rango de fechas</label>
-                        <div class="input-group">
-                            <input type="date" class="form-control" id="startDate" name="startDate"
-                                   th:value="${selectedStartDate}">
-                            <span class="input-group-text">a</span>
-                            <input type="date" class="form-control" id="endDate" name="endDate"
-                                   th:value="${selectedEndDate}">
-                        </div>
-                    </div>
                     <div class="col-12 text-end">
                         <button type="submit" class="btn btn-primary">Aplicar filtros</button>
                     </div>
