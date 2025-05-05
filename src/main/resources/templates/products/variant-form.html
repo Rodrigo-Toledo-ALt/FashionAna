@@ -24,7 +24,7 @@
 
                     <form th:action="@{/products/{productId}/variants(productId=${product.id})}" th:object="${variant}" method="post">
                         <input type="hidden" th:field="*{id}">
-                        <!-- Hidden field to maintain relationship with product -->
+
                         <input type="hidden" name="product.id" th:value="${product.id}">
                         
                         <div class="row mb-3">

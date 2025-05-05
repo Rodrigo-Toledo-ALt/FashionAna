@@ -132,25 +132,6 @@
         </div>
     </div>
 
-    <!-- Productos relacionados -->
-    <div class="mt-5" th:if="${relatedProducts != null && !relatedProducts.isEmpty()}">
-        <h3 class="mb-4">Productos relacionados</h3>
-        <div class="row">
-            <div class="col-md-3 col-sm-6 mb-4" th:each="relatedProduct : ${relatedProducts}">
-                <div class="card h-100">
-                    <img th:if="${relatedProduct.imageUrl}" th:src="${relatedProduct.imageUrl}" class="card-img-top" alt="Imagen del producto"
-                         style="width: 100%; height: 250px; object-fit: cover;">
-                    <img th:unless="${relatedProduct.imageUrl}" src="https://placehold.co/300x200?text=Sin+Imagen" class="card-img-top" alt="Sin imagen"
-                         style="width: 100%; height: 250px; object-fit: cover;">
-                    <div class="card-body">
-                        <h5 class="card-title" th:text="${relatedProduct.name}"></h5>
-                        <p class="card-text fw-bold" th:text="${#numbers.formatCurrency(relatedProduct.basePrice)}"></p>
-                        <a th:href="@{/products/{id}(id=${relatedProduct.id})}" class="btn btn-outline-primary">Ver producto</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
 </main>
 
 <footer th:replace="~{layout :: footer}"></footer>
