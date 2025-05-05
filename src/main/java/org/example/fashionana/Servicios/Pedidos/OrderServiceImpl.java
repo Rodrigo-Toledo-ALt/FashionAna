@@ -49,8 +49,6 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public List<Order> findByCustomerId(Long customerId) {
-        // This would require a custom query method in the repository
-        // For now, we'll implement a simple filter
         return orderRepository.findAll().stream()
                 .filter(order -> order.getCustomer().getId().equals(customerId))
                 .collect(Collectors.toList());
@@ -58,8 +56,6 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public List<Order> findByStatus(OrderStatus status) {
-        // This would require a custom query method in the repository
-        // For now, we'll implement a simple filter
         return orderRepository.findAll().stream()
                 .filter(order -> order.getStatus() == status)
                 .collect(Collectors.toList());
@@ -74,14 +70,14 @@ public class OrderServiceImpl implements OrderService {
             OrderStatus oldStatus = order.getStatus();
             order.setStatus(newStatus);
             
-            // Create status history entry
+            // crea status history
             OrderStatusHistory statusHistory = new OrderStatusHistory();
             statusHistory.setOrder(order);
             statusHistory.setOldStatus(oldStatus);
             statusHistory.setNewStatus(newStatus);
             statusHistory.setChangedAt(LocalDateTime.now());
             
-            // Save both entities
+            // Save ambas entities
             orderStatusHistoryRepository.save(statusHistory);
             return orderRepository.save(order);
         }

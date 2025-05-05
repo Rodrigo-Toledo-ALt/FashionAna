@@ -136,13 +136,13 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
             throw new BusinessLogicException("Shopping cart is empty");
         }
 
-        // Validate customer
+        // valida customer
         Customer customer = cart.getCustomer();
         if (!customer.getId().equals(customerId)) {
             throw new BusinessLogicException("Invalid customer");
         }
 
-        // Validate addresses
+        // valida addresses
         Optional<Address> shippingAddressOpt = addressRepository.findById(shippingAddressId);
         Optional<Address> billingAddressOpt = addressRepository.findById(billingAddressId);
         Optional<PaymentMethod> paymentMethodOpt = paymentMethodRepository.findById(paymentMethodId);
@@ -163,7 +163,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
         Address billingAddress = billingAddressOpt.get();
         PaymentMethod paymentMethod = paymentMethodOpt.get();
 
-        // Create new order
+        // crea  order
         Order order = new Order();
         order.setCustomer(customer);
         order.setShippingAddress(shippingAddress);
@@ -174,7 +174,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
 
         order.setOrderItems(new ArrayList<>());
 
-        // Save order to get ID
+        // guarda order para ID
         order = orderRepository.save(order);
 
         // Create order items and inventory transactions
@@ -191,7 +191,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
             variant.setStockQuantity(variant.getStockQuantity() - cartItem.getQuantity());
             productVariantRepository.save(variant);
 
-            // Create order item
+            // crea order item
             OrderItem orderItem = new OrderItem();
             orderItem.setOrder(order);
             orderItem.setVariant(variant);
@@ -199,10 +199,10 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
             orderItem.setUnitPrice(cartItem.getPrice());
             orderItem.setSubtotal(cartItem.getSubtotal());
 
-            // Add order item to order
+            // añade order item a order
             order.getOrderItems().add(orderItem);
 
-            // Create inventory transaction
+            // crea inventory transaction
             InventoryTransaction inventoryTransaction = new InventoryTransaction();
             inventoryTransaction.setVariant(variant);
             inventoryTransaction.setQuantity(-cartItem.getQuantity()); // Negative quantity for sales
@@ -212,14 +212,14 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
             inventoryTransaction.setNotes("Venta de " + variant.getProduct().getName() +
                     " (" + variant.getSize() + ", " + variant.getColor() + ")");
 
-            // Save inventory transaction
+            // guarda inventory transaction
             inventoryTransactionRepository.save(inventoryTransaction);
         }
 
-        // Save order with items
+        // guarda order con items
         order = orderRepository.save(order);
 
-        // Clear cart
+        // limpia cart
         clearCart(customerId);
 
         return order;

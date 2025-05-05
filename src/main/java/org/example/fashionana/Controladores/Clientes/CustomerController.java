@@ -208,9 +208,6 @@ public class CustomerController {
     /**
      * Elimina una dirección
      */
-    /**
-     * Elimina una dirección
-     */
     @PostMapping("/{customerId}/addresses/{addressId}/delete")
     public String deleteAddress(@PathVariable Long customerId, @PathVariable Long addressId, RedirectAttributes redirectAttributes) {
         Optional<Address> address = addressService.findById(addressId);

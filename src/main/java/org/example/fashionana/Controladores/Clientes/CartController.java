@@ -134,7 +134,7 @@ public class CartController {
                                  RedirectAttributes redirectAttributes) {
         try {
             cartService.removeFromCart(customerId, variantId);
-            redirectAttributes.addFlashAttribute("message", "Item removed from cart");
+            redirectAttributes.addFlashAttribute("message", "Producto eliminado del carrito exitosamente");
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("error", e.getMessage());
         }
@@ -151,7 +151,7 @@ public class CartController {
 
             ShoppingCart cart = cartService.getCart(customerId);
             if (cart.getItems().isEmpty()) {
-                model.addAttribute("error", "Your cart is empty");
+                model.addAttribute("error", "Tu carrito esta vacio");
                 return "cart/view";
             }
 
@@ -180,7 +180,7 @@ public class CartController {
         try {
             Order order = cartService.checkout(customerId, shippingAddressId,
                     billingAddressId, paymentMethodId, deliveryType);
-            redirectAttributes.addFlashAttribute("message", "Order placed successfully");
+            redirectAttributes.addFlashAttribute("message", "Pedido creado correctamente");
             return "redirect:/orders/" + order.getId();
         } catch (BusinessLogicException e) {
             redirectAttributes.addFlashAttribute("error", e.getMessage());
@@ -192,7 +192,7 @@ public class CartController {
     public String clearCart(@RequestParam Long customerId, RedirectAttributes redirectAttributes) {
         try {
             cartService.clearCart(customerId);
-            redirectAttributes.addFlashAttribute("message", "Cart cleared successfully");
+            redirectAttributes.addFlashAttribute("message", "Carrito Limpiado Correctamente");
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("error", e.getMessage());
         }
